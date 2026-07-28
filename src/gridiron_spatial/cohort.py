@@ -2568,80 +2568,45 @@ FULL_RELEASE_REFERENCE = {
 
 
 def _reference_reconciliation(
-    aggregate: dict[str, Any],
-    selected_weeks: tuple[str, ...],
-    reference_path: Path | None,
+    actual: Mapping[str, Any],
+    reference: Mapping[str, Any],
 ) -> dict[str, Any]:
-    if selected_weeks == EXPECTED_WEEKS:
-        expected = FULL_RELEASE_REFERENCE
-        source = "Milestone 1 full-release evidence"
-    elif (
-        selected_weeks == ("2023_w01",)
-        and reference_path is not None
-        and reference_path.is_file()
-    ):
-        reference = json.loads(reference_path.read_text(encoding="utf-8"))
-        expected = {
-            "input_rows": int(reference["entities"]["input_rows"]),
-            "output_rows": int(reference["benchmark"]["rows_processed"]["output"]),
-            "source_plays": int(reference["entities"]["input_game_play_pairs"]),
-            "target_labelled_plays": int(
-                reference["entities"]["plays_with_exactly_one_target"]
-            ),
-            "target_frames_before_exclusion": int(
-                reference["entities"]["player_role_counts"][TARGET_ROLE]
-            ),
-            "expected_output_groups": int(
-                reference["relationships"]["expected_output_groups_from_input"]
-            ),
-            "observed_output_groups": int(
-                reference["relationships"][
-                    "output_unique_game_play_player_groups"
-                ]
-            ),
-            "missing_expected_output_groups": int(
-                reference["relationships"]["missing_output_groups"]
-            ),
-            "input_duplicate_entity_frame_rows": int(
-                reference["relationships"][
-                    "input_duplicate_game_play_player_frame_rows"
-                ]
-            ),
-            "output_duplicate_entity_frame_rows": int(
-                reference["relationships"][
-                    "output_duplicate_game_play_player_frame_rows"
-                ]
-            ),
-            "input_coordinate_missing_rows": int(
-                reference["coordinates"]["missing_input_coordinate_rows"]
-            ),
-            "output_coordinate_missing_rows": int(
-                reference["relationships"]["output_rows_missing_coordinates"]
-            ),
-        }
-        source = str(reference_path)
-    else:
-        return {
-            "source": None,
-            "status": "NOT_APPLICABLE",
-            "checks": {},
-        }
-    checks: dict[str, Any] = {}
-    for name, expected_value in expected.items():
-        observed_value = aggregate.get(name)
-        checks[name] = {
-            "expected": expected_value,
-            "observed": observed_value,
-            "matches": observed_value == expected_value,
-        }
-    failures = [
-        name for name, check in checks.items() if not check["matches"]
-    ]
-    if failures:
-        details = ", ".join(
-            f"{name}: expected {checks[name]['expected']}, "
-            f"observed {checks[name]['observed']}"
-            for name in failures
-        )
-        raise AuditError(f"Milestone 1 reconciliation failed: {details}")
-    return {"source": source, "status": "PASS", "checks": checks}
+    """Compare supplied counts without mutating either mapping."""
+
+    def scalar(value: Any) -> Any:
+        return value.item() if isinstance(value, np.generic) else value
+
+    actual_metrics = set(actual)
+    reference_metrics = set(reference)
+    shared_metrics = sorted(actual_metrics & reference_metrics)
+    matching: list[str] = []
+    mismatched: list[dict[str, Any]] = []
+    for metric in shared_metrics:
+        actual_value = scalar(actual[metric])
+        expected_value = scalar(reference[metric])
+        if actual_value == expected_value:
+            matching.append(metric)
+        else:
+            mismatched.append(
+                {
+                    "metric": metric,
+                    "expected": expected_value,
+                    "actual": actual_value,
+                    "difference": actual_value - expected_value,
+                }
+            )
+    missing_actual = sorted(reference_metrics - actual_metrics)
+    missing_reference = sorted(actual_metrics - reference_metrics)
+    status = (
+        "PASS"
+        if not mismatched and not missing_actual and not missing_reference
+        else "FAIL"
+    )
+    return {
+        "status": status,
+        "metrics_checked": len(shared_metrics),
+        "matching_metrics": matching,
+        "mismatched_metrics": mismatched,
+        "missing_actual_metrics": missing_actual,
+        "missing_reference_metrics": missing_reference,
+    }

@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 from gridiron_spatial.cohort import (
@@ -6,6 +7,7 @@ from gridiron_spatial.cohort import (
     REASON_CODES,
     TABLE_KEY_COLUMNS,
     TABLE_SCHEMAS,
+    _reference_reconciliation,
     _table_reconciliation,
     _validate_game_splits,
     build_exclusion_ledger,
@@ -702,3 +704,61 @@ def test_validate_game_splits_detects_chronology_unknown_and_invalid_week():
     assert len(result["invalid_week_values"]) == 1
     assert result["invalid_week_values"][0]["week"] is None
     assert result["invalid_week_values"][0]["week_number"] is None
+
+
+def test_reference_reconciliation_matches_mismatches_missing_and_is_stable():
+    matching_actual = {"zeta": np.int64(30), "beta": np.int64(20), "alpha": 10}
+    matching_reference = {"alpha": np.int64(10), "beta": 20, "zeta": 30}
+    actual_before = matching_actual.copy()
+    reference_before = matching_reference.copy()
+
+    matched = _reference_reconciliation(
+        matching_actual, matching_reference
+    )
+    assert matched == {
+        "status": "PASS",
+        "metrics_checked": 3,
+        "matching_metrics": ["alpha", "beta", "zeta"],
+        "mismatched_metrics": [],
+        "missing_actual_metrics": [],
+        "missing_reference_metrics": [],
+    }
+    assert matching_actual == actual_before
+    assert matching_reference == reference_before
+
+    actual = {
+        "zeta": np.int64(9),
+        "alpha": 2,
+        "actual_only": 4,
+    }
+    reference = {
+        "alpha": np.int64(1),
+        "zeta": 7,
+        "reference_only": 3,
+    }
+    actual_before = actual.copy()
+    reference_before = reference.copy()
+    failed = _reference_reconciliation(actual, reference)
+
+    assert list(failed) == [
+        "status",
+        "metrics_checked",
+        "matching_metrics",
+        "mismatched_metrics",
+        "missing_actual_metrics",
+        "missing_reference_metrics",
+    ]
+    assert failed == {
+        "status": "FAIL",
+        "metrics_checked": 2,
+        "matching_metrics": [],
+        "mismatched_metrics": [
+            {"metric": "alpha", "expected": 1, "actual": 2, "difference": 1},
+            {"metric": "zeta", "expected": 7, "actual": 9, "difference": 2},
+        ],
+        "missing_actual_metrics": ["reference_only"],
+        "missing_reference_metrics": ["actual_only"],
+    }
+    assert failed == _reference_reconciliation(actual, reference)
+    assert actual == actual_before
+    assert reference == reference_before
