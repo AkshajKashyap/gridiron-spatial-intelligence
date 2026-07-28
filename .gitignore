@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Data / artifacts
+data/raw/*
+data/processed/*
+artifacts/*
+
+# Keep directories
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!artifacts/.gitkeep
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+
+# OS / editor
+.DS_Store
+.vscode/

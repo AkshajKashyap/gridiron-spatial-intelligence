@@ -1,0 +1,9 @@
+[project]
+name = "gridiron-spatial-intelligence"
+version = "0.1.0"
+description = "Spatiotemporal NFL player-tracking analytics and passing-window modeling"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
