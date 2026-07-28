@@ -253,6 +253,27 @@ TABLE_KEY_COLUMNS: dict[str, list[str]] = {
         "defender_nfl_id",
     ],
 }
+EXCLUSION_LEDGER_SCHEMA = [
+    "ledger_id",
+    "source_table",
+    "unit_type",
+    "exclusion_level",
+    "game_id",
+    "play_id",
+    "phase",
+    "frame_id",
+    "nfl_id",
+    "target_nfl_id",
+    "defender_nfl_id",
+    "origin_frame",
+    "horizon",
+    "week",
+    "week_number",
+    "split",
+    *REASON_CODES,
+    "primary_exclusion_reason",
+    "secondary_exclusion_reasons",
+]
 
 
 @dataclass(frozen=True)
@@ -512,6 +533,10 @@ def assign_exclusion_reasons(frame: pd.DataFrame) -> pd.DataFrame:
 
 
 _SCHEMA_STRING_COLUMNS = {
+    "ledger_id",
+    "source_table",
+    "unit_type",
+    "exclusion_level",
     "game_id",
     "play_id",
     "nfl_id",
@@ -1994,14 +2019,21 @@ def build_week_cohorts(
 
 def _ledger_table(
     frame: pd.DataFrame,
+    *,
+    source_table: str,
+    unit_type: str,
     level: str,
     id_columns: list[str],
 ) -> pd.DataFrame:
-    excluded = frame.loc[~frame["eligible"]].copy()
+    normalized = assign_exclusion_reasons(frame)
+    failed = normalized[list(REASON_CODES)].any(axis=1)
+    excluded = normalized.loc[failed].copy()
     if excluded.empty:
         return pd.DataFrame()
+    excluded["source_table"] = source_table
+    excluded["unit_type"] = unit_type
     excluded["exclusion_level"] = level
-    for column in (
+    optional_identifiers = (
         "phase",
         "frame_id",
         "nfl_id",
@@ -2009,36 +2041,44 @@ def _ledger_table(
         "defender_nfl_id",
         "origin_frame",
         "horizon",
-    ):
+    )
+    for column in optional_identifiers:
         if column not in excluded:
             excluded[column] = pd.NA
-    unit_parts: list[pd.Series] = []
+        elif column not in id_columns:
+            excluded[column] = pd.NA
+    ledger_id = pd.Series(
+        f"{source_table}|{unit_type}",
+        index=excluded.index,
+        dtype="string",
+    )
     for column in id_columns:
-        values = excluded[column].astype("string").fillna("<NA>")
-        unit_parts.append(column + "=" + values)
-    unit_id = unit_parts[0]
-    for part in unit_parts[1:]:
-        unit_id = unit_id + "|" + part
-    excluded["unit_id"] = unit_id
-    columns = [
-        "unit_id",
-        "exclusion_level",
-        *PLAY_KEYS,
-        "phase",
-        "frame_id",
-        "nfl_id",
-        "target_nfl_id",
-        "defender_nfl_id",
-        "origin_frame",
-        "horizon",
-        "week",
-        "week_number",
-        "split",
-        *REASON_CODES,
-        "primary_exclusion_reason",
-        "secondary_exclusion_reasons",
-    ]
-    return excluded[columns]
+        present = excluded[column].notna()
+        values = excluded.loc[present, column].astype("string")
+        ledger_id.loc[present] = (
+            ledger_id.loc[present] + f"|{column}=" + values
+        )
+    excluded["ledger_id"] = ledger_id
+    return excluded[EXCLUSION_LEDGER_SCHEMA]
+
+
+def _freeze_exclusion_ledger(frame: pd.DataFrame) -> pd.DataFrame:
+    result = frame.reindex(columns=EXCLUSION_LEDGER_SCHEMA).copy()
+    for column in EXCLUSION_LEDGER_SCHEMA:
+        if column in _SCHEMA_STRING_COLUMNS:
+            result[column] = result[column].astype("string")
+        elif column in REASON_CODES:
+            result[column] = result[column].fillna(False).astype(bool)
+        else:
+            result[column] = pd.to_numeric(
+                result[column], errors="coerce"
+            ).astype("Int64")
+    if result["ledger_id"].duplicated().any():
+        duplicates = result.loc[
+            result["ledger_id"].duplicated(keep=False), "ledger_id"
+        ].tolist()
+        raise AuditError(f"Duplicate exclusion ledger IDs: {duplicates[:5]}")
+    return result.reset_index(drop=True)
 
 
 def build_exclusion_ledger(
@@ -2052,34 +2092,66 @@ def build_exclusion_ledger(
     """Combine excluded units while retaining their distinct unit levels."""
 
     tables = [
-        _ledger_table(source, "play", PLAY_KEYS),
+        _ledger_table(
+            source,
+            source_table="source_plays",
+            unit_type="source_play",
+            level="play",
+            id_columns=PLAY_KEYS,
+        ),
         _ledger_table(
             descriptive,
-            "frame",
-            [*PLAY_KEYS, "phase", "frame_id", "target_nfl_id"],
+            source_table="descriptive_target_frames",
+            unit_type="target_frame",
+            level="frame",
+            id_columns=[
+                *PLAY_KEYS,
+                "phase",
+                "frame_id",
+                "target_nfl_id",
+            ],
         ),
         _ledger_table(
             origins,
-            "entity-origin",
-            [*PLAY_KEYS, "target_nfl_id", "origin_frame"],
+            source_table="primary_origins",
+            unit_type="primary_origin",
+            level="entity-origin",
+            id_columns=[*PLAY_KEYS, "target_nfl_id", "origin_frame"],
         ),
         _ledger_table(
             trajectories,
-            "entity-origin",
-            [*PLAY_KEYS, "nfl_id", "origin_frame", "horizon"],
+            source_table="trajectory_eligibility",
+            unit_type="trajectory_entity_horizon",
+            level="entity-origin",
+            id_columns=[
+                *PLAY_KEYS,
+                "nfl_id",
+                "target_nfl_id",
+                "origin_frame",
+                "horizon",
+            ],
         ),
         _ledger_table(
             future,
-            "horizon sample",
-            [*PLAY_KEYS, "target_nfl_id", "origin_frame", "horizon"],
+            source_table="future_separation_eligibility",
+            unit_type="target_horizon",
+            level="horizon sample",
+            id_columns=[
+                *PLAY_KEYS,
+                "target_nfl_id",
+                "origin_frame",
+                "horizon",
+            ],
         ),
     ]
     if not pair_exclusions.empty:
         tables.append(
             _ledger_table(
                 pair_exclusions,
-                "pair",
-                [
+                source_table="pair_exclusions",
+                unit_type="target_defender_pair",
+                level="pair",
+                id_columns=[
                     *PLAY_KEYS,
                     "phase",
                     "frame_id",
@@ -2090,30 +2162,12 @@ def build_exclusion_ledger(
         )
     nonempty = [table for table in tables if not table.empty]
     if not nonempty:
-        columns = [
-            "unit_id",
-            "exclusion_level",
-            *PLAY_KEYS,
-            "phase",
-            "frame_id",
-            "nfl_id",
-            "target_nfl_id",
-            "defender_nfl_id",
-            "origin_frame",
-            "horizon",
-            "week",
-            "week_number",
-            "split",
-            *REASON_CODES,
-            "primary_exclusion_reason",
-            "secondary_exclusion_reasons",
-        ]
-        return pd.DataFrame(columns=columns)
+        return _freeze_exclusion_ledger(pd.DataFrame())
     ledger = pd.concat(nonempty, ignore_index=True)
     ledger = ledger.sort_values(
         [
             "week_number",
-            "exclusion_level",
+            "source_table",
             "game_id",
             "play_id",
             "horizon",
@@ -2123,7 +2177,7 @@ def build_exclusion_ledger(
         kind="stable",
         na_position="last",
     ).reset_index(drop=True)
-    return ledger
+    return _freeze_exclusion_ledger(ledger)
 
 
 def _table_reconciliation(

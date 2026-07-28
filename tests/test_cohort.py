@@ -2,9 +2,11 @@ import pandas as pd
 
 from gridiron_spatial.cohort import (
     COHORT_TABLE_NAMES,
+    EXCLUSION_LEDGER_SCHEMA,
     REASON_CODES,
     TABLE_KEY_COLUMNS,
     TABLE_SCHEMAS,
+    build_exclusion_ledger,
     build_week_cohorts,
     phase_qualified_entity_frame_keys,
 )
@@ -268,3 +270,136 @@ def test_input_and_output_numeric_frames_remain_phase_qualified():
         ["game_id", "play_id", "phase", "frame_id", "nfl_id"]
     ).any()
     assert set(combined["phase"]) == {"input", "output"}
+
+
+def _ledger_fixture_tables():
+    inputs, outputs, supplementary = _tiny_fixture()
+    result = build_week_cohorts(inputs, outputs, supplementary, "2023_w01")
+
+    source = result.source_plays.copy()
+    source.loc[source["game_id"].eq("1"), ["C03", "C07"]] = True
+
+    descriptive = result.descriptive_target_frames.loc[
+        (
+            result.descriptive_target_frames["game_id"].eq("1")
+            & result.descriptive_target_frames["frame_id"].eq(1)
+        )
+        | result.descriptive_target_frames["game_id"].eq("2")
+    ].copy()
+    origins = result.primary_origins.loc[
+        result.primary_origins["game_id"].eq("2")
+    ].copy()
+    trajectories = result.trajectory_eligibility.loc[
+        result.trajectory_eligibility["game_id"].eq("1")
+        & result.trajectory_eligibility["nfl_id"].eq("101")
+        & result.trajectory_eligibility["horizon"].eq(10)
+    ].copy()
+    future = result.future_separation_eligibility.loc[
+        result.future_separation_eligibility["game_id"].eq("1")
+        & result.future_separation_eligibility["horizon"].eq(10)
+    ].copy()
+
+    pair_values = {
+        "game_id": "1",
+        "play_id": "10",
+        "phase": "input",
+        "frame_id": 2,
+        "target_nfl_id": "101",
+        "defender_nfl_id": "299",
+        "week": "2023_w01",
+        "week_number": 1,
+        "split": "development_train",
+        "coordinate_category": "invalid",
+        "coordinate_missing": True,
+        "outside_nominal": False,
+        "outside_extended_tolerance": False,
+        **{code: False for code in REASON_CODES},
+        "primary_exclusion_reason": "",
+        "secondary_exclusion_reasons": "",
+        "eligible": True,
+    }
+    pair_values["C06"] = True
+    pairs = pd.DataFrame([pair_values]).reindex(
+        columns=TABLE_SCHEMAS["pair_exclusions"]
+    )
+    return {
+        "source_plays": source,
+        "descriptive_target_frames": descriptive,
+        "primary_origins": origins,
+        "trajectory_eligibility": trajectories,
+        "future_separation_eligibility": future,
+        "pair_exclusions": pairs,
+    }
+
+
+def test_build_exclusion_ledger_covers_each_unit_once_and_reconciles():
+    tables = _ledger_fixture_tables()
+    ledger = build_exclusion_ledger(
+        tables["source_plays"],
+        tables["descriptive_target_frames"],
+        tables["primary_origins"],
+        tables["trajectory_eligibility"],
+        tables["future_separation_eligibility"],
+        tables["pair_exclusions"],
+    )
+
+    assert list(ledger.columns) == EXCLUSION_LEDGER_SCHEMA
+    assert len(ledger) == 6
+    assert ledger["ledger_id"].is_unique
+    assert not ledger["ledger_id"].str.contains("<NA>", regex=False).any()
+    assert set(zip(ledger["source_table"], ledger["unit_type"])) == {
+        ("source_plays", "source_play"),
+        ("descriptive_target_frames", "target_frame"),
+        ("primary_origins", "primary_origin"),
+        ("trajectory_eligibility", "trajectory_entity_horizon"),
+        ("future_separation_eligibility", "target_horizon"),
+        ("pair_exclusions", "target_defender_pair"),
+    }
+
+    expected_counts = {
+        name: int(table[list(REASON_CODES)].any(axis=1).sum())
+        for name, table in tables.items()
+    }
+    assert ledger["source_table"].value_counts().to_dict() == expected_counts
+
+    source_row = ledger.loc[ledger["source_table"].eq("source_plays")].iloc[0]
+    assert source_row["primary_exclusion_reason"] == "C03"
+    assert source_row["secondary_exclusion_reasons"] == "C07"
+    assert pd.isna(source_row["phase"])
+    assert pd.isna(source_row["frame_id"])
+    assert pd.isna(source_row["nfl_id"])
+    assert pd.isna(source_row["target_nfl_id"])
+    assert pd.isna(source_row["origin_frame"])
+    assert pd.isna(source_row["horizon"])
+
+    assert not (
+        ledger["source_table"].eq("source_plays")
+        & ledger["game_id"].eq("2")
+    ).any()
+    assert not (
+        ledger["source_table"].eq("descriptive_target_frames")
+        & ledger["game_id"].eq("1")
+    ).any()
+
+
+def test_build_exclusion_ledger_empty_schema_and_dtypes_are_stable():
+    tables = _ledger_fixture_tables()
+    empty = {
+        name: table.iloc[0:0].copy() for name, table in tables.items()
+    }
+    ledger = build_exclusion_ledger(
+        empty["source_plays"],
+        empty["descriptive_target_frames"],
+        empty["primary_origins"],
+        empty["trajectory_eligibility"],
+        empty["future_separation_eligibility"],
+        empty["pair_exclusions"],
+    )
+
+    assert ledger.empty
+    assert list(ledger.columns) == EXCLUSION_LEDGER_SCHEMA
+    assert str(ledger["ledger_id"].dtype) == "string"
+    assert str(ledger["game_id"].dtype) == "string"
+    assert str(ledger["frame_id"].dtype) == "Int64"
+    assert str(ledger["horizon"].dtype) == "Int64"
+    assert ledger["C01"].dtype == bool
