@@ -13,6 +13,7 @@ from gridiron_spatial.cohort import (
     build_exclusion_ledger,
     build_week_cohorts,
     phase_qualified_entity_frame_keys,
+    summarize_cohort_reporting,
 )
 
 
@@ -762,3 +763,151 @@ def test_reference_reconciliation_matches_mismatches_missing_and_is_stable():
     assert failed == _reference_reconciliation(actual, reference)
     assert actual == actual_before
     assert reference == reference_before
+
+
+def test_reporting_summary_is_canonical_complete_pure_and_empty():
+    import scripts.smoke_two_week_cohort as smoke_reporter
+
+    assert smoke_reporter.REASON_CODES is REASON_CODES
+    assert (
+        smoke_reporter.summarize_cohort_reporting
+        is summarize_cohort_reporting
+    )
+
+    tables = {
+        "source_plays": pd.DataFrame(
+            {
+                "game_id": [1, 1, 2],
+                "split": [
+                    "development_train",
+                    "development_train",
+                    "validation",
+                ],
+                "eligible": [True, False, True],
+            }
+        ),
+        "descriptive_target_frames": pd.DataFrame(
+            {
+                "split": ["development_train", "frozen_test"],
+                "eligible": [True, False],
+            }
+        ),
+        "primary_origins": pd.DataFrame(
+            {"split": pd.Series(dtype="string"), "eligible": pd.Series(dtype=bool)}
+        ),
+        "trajectory_eligibility": pd.DataFrame(
+            {
+                "split": ["validation", "validation"],
+                "eligible": [True, False],
+            }
+        ),
+        "future_separation_eligibility": pd.DataFrame(
+            {
+                "split": [
+                    "development_train",
+                    "validation",
+                    "frozen_test",
+                ],
+                "eligible": [True, False, True],
+                "horizon": [5, 5, 10],
+                "evaluable_defender_count": [2, 0, 1],
+            }
+        ),
+        "pair_exclusions": pd.DataFrame(
+            {"split": pd.Series(dtype="string"), "eligible": pd.Series(dtype=bool)}
+        ),
+    }
+    ledger = pd.DataFrame(
+        {"primary_exclusion_reason": ["C07", "C03", "C07"]}
+    )
+    table_copies = {
+        name: table.copy(deep=True) for name, table in tables.items()
+    }
+    ledger_copy = ledger.copy(deep=True)
+
+    result = summarize_cohort_reporting(tables, ledger)
+
+    assert list(result) == [
+        "exclusions_by_primary_reason",
+        "counts_by_split",
+        "observed_game_count",
+        "evaluable_defender_count_distribution_by_horizon",
+    ]
+    assert list(result["exclusions_by_primary_reason"]) == list(REASON_CODES)
+    assert result["exclusions_by_primary_reason"]["C03"] == 1
+    assert result["exclusions_by_primary_reason"]["C07"] == 2
+    assert all(
+        result["exclusions_by_primary_reason"][reason] == 0
+        for reason in REASON_CODES
+        if reason not in {"C03", "C07"}
+    )
+    assert result["counts_by_split"]["development_train"]["source_plays"] == {
+        "rows": 2,
+        "eligible": 1,
+        "excluded": 1,
+    }
+    assert result["counts_by_split"]["validation"][
+        "trajectory_eligibility"
+    ] == {"rows": 2, "eligible": 1, "excluded": 1}
+    assert result["observed_game_count"] == 2
+    assert result[
+        "evaluable_defender_count_distribution_by_horizon"
+    ] == {"5": {"0": 1, "2": 1}, "10": {"1": 1}, "15": {}}
+    for name in COHORT_TABLE_NAMES:
+        pd.testing.assert_frame_equal(tables[name], table_copies[name])
+    pd.testing.assert_frame_equal(ledger, ledger_copy)
+
+    empty_tables = {
+        name: pd.DataFrame(
+            {
+                "split": pd.Series(dtype="string"),
+                "eligible": pd.Series(dtype=bool),
+                **(
+                    {"game_id": pd.Series(dtype="Int64")}
+                    if name == "source_plays"
+                    else {}
+                ),
+                **(
+                    {
+                        "horizon": pd.Series(dtype="Int64"),
+                        "evaluable_defender_count": pd.Series(dtype="Int64"),
+                    }
+                    if name == "future_separation_eligibility"
+                    else {}
+                ),
+            }
+        )
+        for name in COHORT_TABLE_NAMES
+    }
+    empty_result = summarize_cohort_reporting(
+        empty_tables,
+        pd.DataFrame(
+            {"primary_exclusion_reason": pd.Series(dtype="string")}
+        ),
+    )
+    assert empty_result["observed_game_count"] == 0
+    assert all(
+        value == 0
+        for value in empty_result["exclusions_by_primary_reason"].values()
+    )
+    assert empty_result[
+        "evaluable_defender_count_distribution_by_horizon"
+    ] == {"5": {}, "10": {}, "15": {}}
+    assert all(
+        counts == {"rows": 0, "eligible": 0, "excluded": 0}
+        for split_counts in empty_result["counts_by_split"].values()
+        for counts in split_counts.values()
+    )
+
+    malformed = {
+        name: table.copy(deep=True) for name, table in empty_tables.items()
+    }
+    malformed["source_plays"] = malformed["source_plays"].drop(
+        columns="game_id"
+    )
+    try:
+        summarize_cohort_reporting(malformed, ledger.iloc[0:0])
+    except Exception as exc:
+        assert "game_id" in str(exc)
+    else:
+        raise AssertionError("Missing reporting data must raise a clear error")

@@ -2610,3 +2610,104 @@ def _reference_reconciliation(
         "missing_actual_metrics": missing_actual,
         "missing_reference_metrics": missing_reference,
     }
+
+
+def summarize_cohort_reporting(
+    tables: Mapping[str, pd.DataFrame],
+    ledger: pd.DataFrame,
+) -> dict[str, Any]:
+    """Build deterministic reporting-only summaries from supplied tables."""
+
+    expected_names = set(COHORT_TABLE_NAMES)
+    if set(tables) != expected_names:
+        raise AuditError(
+            "Reporting requires exactly the six frozen tables: "
+            f"missing={sorted(expected_names - set(tables))}, "
+            f"unexpected={sorted(set(tables) - expected_names)}"
+        )
+    splits = ("development_train", "validation", "frozen_test")
+    counts_by_split: dict[str, dict[str, dict[str, int]]] = {
+        split: {} for split in splits
+    }
+    for name in COHORT_TABLE_NAMES:
+        table = tables[name]
+        missing = sorted({"split", "eligible"} - set(table.columns))
+        if missing:
+            raise AuditError(f"{name} is missing reporting columns: {missing}")
+        split_values = table["split"].astype("string")
+        if (split_values.isna() | ~split_values.isin(splits)).any():
+            raise AuditError(f"{name} contains unknown or null split values")
+        if table["eligible"].isna().any():
+            raise AuditError(f"{name} contains null eligibility values")
+        for split in splits:
+            selected = table.loc[split_values.eq(split)]
+            eligible = int(selected["eligible"].sum())
+            counts_by_split[split][name] = {
+                "rows": int(len(selected)),
+                "eligible": eligible,
+                "excluded": int(len(selected) - eligible),
+            }
+
+    if "primary_exclusion_reason" not in ledger.columns:
+        raise AuditError(
+            "Exclusion ledger is missing primary_exclusion_reason"
+        )
+    reasons = ledger["primary_exclusion_reason"].astype("string")
+    if (reasons.isna() | ~reasons.isin(REASON_CODES)).any():
+        raise AuditError("Exclusion ledger contains missing or unknown reasons")
+    reason_values = reasons.value_counts()
+    reason_counts = {
+        code: int(reason_values.get(code, 0)) for code in REASON_CODES
+    }
+
+    source = tables["source_plays"]
+    if "game_id" not in source.columns:
+        raise AuditError("source_plays is missing game_id")
+    if source["game_id"].isna().any():
+        raise AuditError("source_plays contains null game_id values")
+    observed_game_count = int(source["game_id"].astype("string").nunique())
+
+    future = tables["future_separation_eligibility"]
+    future_required = {"horizon", "evaluable_defender_count"}
+    missing_future = sorted(future_required - set(future.columns))
+    if missing_future:
+        raise AuditError(
+            "future_separation_eligibility is missing reporting columns: "
+            f"{missing_future}"
+        )
+    horizons = pd.to_numeric(future["horizon"], errors="coerce")
+    defender_counts = pd.to_numeric(
+        future["evaluable_defender_count"], errors="coerce"
+    )
+    valid_defender_counts = (
+        defender_counts.notna()
+        & np.isfinite(defender_counts)
+        & defender_counts.ge(0)
+        & defender_counts.eq(np.floor(defender_counts))
+    )
+    if (
+        horizons.isna()
+        | ~horizons.isin(HORIZONS)
+        | ~valid_defender_counts
+    ).any():
+        raise AuditError(
+            "future_separation_eligibility contains invalid horizon or "
+            "evaluable_defender_count values"
+        )
+    defender_distribution: dict[str, dict[str, int]] = {}
+    for horizon in HORIZONS:
+        values = defender_counts.loc[horizons.eq(horizon)].astype("int64")
+        frequencies = values.value_counts().sort_index()
+        defender_distribution[str(horizon)] = {
+            str(count): int(frequency)
+            for count, frequency in frequencies.items()
+        }
+
+    return {
+        "exclusions_by_primary_reason": reason_counts,
+        "counts_by_split": counts_by_split,
+        "observed_game_count": observed_game_count,
+        "evaluable_defender_count_distribution_by_horizon": (
+            defender_distribution
+        ),
+    }

@@ -18,12 +18,14 @@ from gridiron_spatial.cohort import (  # noqa: E402
     HORIZONS,
     INPUT_USECOLS,
     OUTPUT_USECOLS,
+    REASON_CODES,
     TABLE_KEY_COLUMNS,
     TABLE_SCHEMAS,
     _table_reconciliation,
     _validate_game_splits,
     build_exclusion_ledger,
     build_week_cohorts,
+    summarize_cohort_reporting,
 )
 
 
@@ -172,6 +174,9 @@ def main() -> int:
         aggregate_tables, aggregate_ledger
     )
     split_validation = _validate_game_splits(aggregate_tables)
+    reporting = summarize_cohort_reporting(aggregate_tables, aggregate_ledger)
+    if tuple(reporting["exclusions_by_primary_reason"]) != REASON_CODES:
+        raise RuntimeError("Reporting reason codes are not in canonical order")
     if aggregate_reconciliation["overall"]["reconciliation_status"] != "PASS":
         return 1
     if split_validation["status"] != "PASS":
@@ -215,6 +220,14 @@ def main() -> int:
         "aggregate_split_validation_status": split_validation["status"],
         "aggregate_duplicate_key_counts": duplicate_key_counts,
         "aggregate_duplicate_ledger_id_count": duplicate_ledger_ids,
+        "exclusions_by_primary_reason": reporting[
+            "exclusions_by_primary_reason"
+        ],
+        "counts_by_split": reporting["counts_by_split"],
+        "observed_game_count": reporting["observed_game_count"],
+        "evaluable_defender_count_distribution_by_horizon": reporting[
+            "evaluable_defender_count_distribution_by_horizon"
+        ],
         "horizon_counts": horizon_counts,
         "aggregate_totals_equal_summed_weekly_totals": (
             summed_weekly_totals_match
