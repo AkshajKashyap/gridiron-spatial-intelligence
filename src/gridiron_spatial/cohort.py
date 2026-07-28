@@ -2181,38 +2181,155 @@ def build_exclusion_ledger(
 
 
 def _table_reconciliation(
-    frame: pd.DataFrame,
-    *,
-    horizon: int | None = None,
+    tables: Mapping[str, pd.DataFrame],
+    ledger: pd.DataFrame,
 ) -> dict[str, Any]:
-    selected = frame if horizon is None else frame.loc[frame["horizon"].eq(horizon)]
-    denominator = int(len(selected))
-    eligible = int(selected["eligible"].sum())
-    excluded = denominator - eligible
-    primary_counts = {
-        str(key): int(value)
-        for key, value in selected.loc[
-            ~selected["eligible"], "primary_exclusion_reason"
-        ]
-        .value_counts()
-        .sort_index()
-        .items()
-    }
-    secondary_flag_counts = {
-        code: int(selected[code].sum()) for code in REASON_CODES
-    }
-    if sum(primary_counts.values()) != excluded:
+    """Reconcile six frozen cohort tables to one exclusion ledger."""
+
+    expected_names = set(COHORT_TABLE_NAMES)
+    supplied_names = set(tables)
+    if supplied_names != expected_names:
         raise AuditError(
-            "Primary exclusions do not reconcile: "
-            f"denominator={denominator}, eligible={eligible}, "
-            f"primary={sum(primary_counts.values())}"
+            "Reconciliation requires exactly the six frozen tables: "
+            f"missing={sorted(expected_names - supplied_names)}, "
+            f"unexpected={sorted(supplied_names - expected_names)}"
         )
+    missing_ledger_columns = sorted(
+        set(EXCLUSION_LEDGER_SCHEMA) - set(ledger.columns)
+    )
+    if missing_ledger_columns:
+        raise AuditError(
+            f"Exclusion ledger is missing columns: {missing_ledger_columns}"
+        )
+
+    expected_ledger = build_exclusion_ledger(
+        *(tables[name] for name in COHORT_TABLE_NAMES)
+    )
+    ledger_sources = ledger["source_table"].astype("string")
+    unknown_source_mask = ~ledger_sources.isin(COHORT_TABLE_NAMES)
+    unknown_source_values = sorted(
+        {
+            None if pd.isna(value) else str(value)
+            for value in ledger_sources.loc[unknown_source_mask]
+        },
+        key=lambda value: "" if value is None else value,
+    )
+
+    records: list[dict[str, Any]] = []
+    overall_primary = {code: 0 for code in REASON_CODES}
+    for name in COHORT_TABLE_NAMES:
+        normalized = assign_exclusion_reasons(tables[name])
+        failed = normalized[list(REASON_CODES)].any(axis=1)
+        total_rows = int(len(normalized))
+        excluded_rows = int(failed.sum())
+        eligible_rows = total_rows - excluded_rows
+        primary_values = normalized.loc[
+            failed, "primary_exclusion_reason"
+        ].value_counts()
+        primary_counts = {
+            code: int(primary_values.get(code, 0)) for code in REASON_CODES
+        }
+        for code in REASON_CODES:
+            overall_primary[code] += primary_counts[code]
+
+        expected_ids = expected_ledger.loc[
+            expected_ledger["source_table"].eq(name), "ledger_id"
+        ].astype("string")
+        actual_ids = ledger.loc[
+            ledger_sources.eq(name), "ledger_id"
+        ].astype("string")
+        expected_counts = expected_ids.value_counts(dropna=False)
+        actual_counts = actual_ids.value_counts(dropna=False)
+        missing_rows = int(
+            sum(
+                max(
+                    int(expected_count)
+                    - int(actual_counts.get(identifier, 0)),
+                    0,
+                )
+                for identifier, expected_count in expected_counts.items()
+            )
+        )
+        duplicate_rows = int(
+            sum(max(int(count) - 1, 0) for count in actual_counts.values)
+        )
+        expected_id_set = set(expected_ids.dropna())
+        unexpected_rows = int(
+            (
+                actual_ids.isna()
+                | ~actual_ids.isin(expected_id_set)
+            ).sum()
+        )
+        ledger_rows = int(len(actual_ids))
+        difference = excluded_rows - ledger_rows
+        primary_sum = sum(primary_counts.values())
+        status = (
+            "PASS"
+            if (
+                total_rows == eligible_rows + excluded_rows
+                and primary_sum == excluded_rows
+                and difference == 0
+                and missing_rows == 0
+                and duplicate_rows == 0
+                and unexpected_rows == 0
+            )
+            else "FAIL"
+        )
+        records.append(
+            {
+                "source_table": name,
+                "total_rows": total_rows,
+                "eligible_rows": eligible_rows,
+                "excluded_rows": excluded_rows,
+                "exclusion_ledger_rows": ledger_rows,
+                "excluded_minus_ledger_rows": difference,
+                "primary_exclusion_counts": primary_counts,
+                "missing_ledger_rows": missing_rows,
+                "duplicate_ledger_rows": duplicate_rows,
+                "unexpected_ledger_rows": unexpected_rows,
+                "reconciliation_status": status,
+            }
+        )
+
+    overall = {
+        "total_rows": sum(record["total_rows"] for record in records),
+        "eligible_rows": sum(record["eligible_rows"] for record in records),
+        "excluded_rows": sum(record["excluded_rows"] for record in records),
+        "exclusion_ledger_rows": sum(
+            record["exclusion_ledger_rows"] for record in records
+        ),
+        "excluded_minus_ledger_rows": sum(
+            record["excluded_minus_ledger_rows"] for record in records
+        ),
+        "primary_exclusion_counts": overall_primary,
+        "missing_ledger_rows": sum(
+            record["missing_ledger_rows"] for record in records
+        ),
+        "duplicate_ledger_rows": sum(
+            record["duplicate_ledger_rows"] for record in records
+        ),
+        "unexpected_ledger_rows": sum(
+            record["unexpected_ledger_rows"] for record in records
+        ),
+        "unknown_source_table_rows": int(unknown_source_mask.sum()),
+        "unknown_source_tables": unknown_source_values,
+    }
+    overall["reconciliation_status"] = (
+        "PASS"
+        if (
+            all(
+                record["reconciliation_status"] == "PASS"
+                for record in records
+            )
+            and overall["unknown_source_table_rows"] == 0
+            and not ledger["ledger_id"].isna().any()
+        )
+        else "FAIL"
+    )
     return {
-        "denominator": denominator,
-        "eligible": eligible,
-        "excluded": excluded,
-        "primary_exclusion_counts": primary_counts,
-        "all_reason_flag_counts": secondary_flag_counts,
+        "table_order": list(COHORT_TABLE_NAMES),
+        "tables": records,
+        "overall": overall,
     }
 
 

@@ -6,6 +6,7 @@ from gridiron_spatial.cohort import (
     REASON_CODES,
     TABLE_KEY_COLUMNS,
     TABLE_SCHEMAS,
+    _table_reconciliation,
     build_exclusion_ledger,
     build_week_cohorts,
     phase_qualified_entity_frame_keys,
@@ -403,3 +404,155 @@ def test_build_exclusion_ledger_empty_schema_and_dtypes_are_stable():
     assert str(ledger["frame_id"].dtype) == "Int64"
     assert str(ledger["horizon"].dtype) == "Int64"
     assert ledger["C01"].dtype == bool
+
+
+RECONCILIATION_RECORD_SCHEMA = [
+    "source_table",
+    "total_rows",
+    "eligible_rows",
+    "excluded_rows",
+    "exclusion_ledger_rows",
+    "excluded_minus_ledger_rows",
+    "primary_exclusion_counts",
+    "missing_ledger_rows",
+    "duplicate_ledger_rows",
+    "unexpected_ledger_rows",
+    "reconciliation_status",
+]
+RECONCILIATION_OVERALL_SCHEMA = [
+    "total_rows",
+    "eligible_rows",
+    "excluded_rows",
+    "exclusion_ledger_rows",
+    "excluded_minus_ledger_rows",
+    "primary_exclusion_counts",
+    "missing_ledger_rows",
+    "duplicate_ledger_rows",
+    "unexpected_ledger_rows",
+    "unknown_source_table_rows",
+    "unknown_source_tables",
+    "reconciliation_status",
+]
+
+
+def _ledger_for_tables(tables):
+    return build_exclusion_ledger(
+        tables["source_plays"],
+        tables["descriptive_target_frames"],
+        tables["primary_origins"],
+        tables["trajectory_eligibility"],
+        tables["future_separation_eligibility"],
+        tables["pair_exclusions"],
+    )
+
+
+def test_table_reconciliation_passes_per_table_and_overall():
+    tables = _ledger_fixture_tables()
+    ledger = _ledger_for_tables(tables)
+
+    result = _table_reconciliation(tables, ledger)
+    assert list(result) == ["table_order", "tables", "overall"]
+    assert result["table_order"] == list(COHORT_TABLE_NAMES)
+    assert [record["source_table"] for record in result["tables"]] == list(
+        COHORT_TABLE_NAMES
+    )
+    assert all(
+        list(record) == RECONCILIATION_RECORD_SCHEMA
+        for record in result["tables"]
+    )
+    for record in result["tables"]:
+        assert record["total_rows"] == (
+            record["eligible_rows"] + record["excluded_rows"]
+        )
+        assert record["excluded_rows"] == record["exclusion_ledger_rows"]
+        assert record["excluded_minus_ledger_rows"] == 0
+        assert (
+            sum(record["primary_exclusion_counts"].values())
+            == record["excluded_rows"]
+        )
+        assert record["reconciliation_status"] == "PASS"
+
+    overall = result["overall"]
+    assert list(overall) == RECONCILIATION_OVERALL_SCHEMA
+    for field in (
+        "total_rows",
+        "eligible_rows",
+        "excluded_rows",
+        "exclusion_ledger_rows",
+    ):
+        assert overall[field] == sum(
+            record[field] for record in result["tables"]
+        )
+    assert overall["total_rows"] == (
+        overall["eligible_rows"] + overall["excluded_rows"]
+    )
+    assert sum(overall["primary_exclusion_counts"].values()) == overall[
+        "excluded_rows"
+    ]
+    assert overall["reconciliation_status"] == "PASS"
+
+    source = next(
+        record
+        for record in result["tables"]
+        if record["source_table"] == "source_plays"
+    )
+    assert source["excluded_rows"] == 1
+    assert source["primary_exclusion_counts"]["C03"] == 1
+    assert source["primary_exclusion_counts"]["C07"] == 0
+    assert result == _table_reconciliation(tables, ledger)
+
+
+def test_table_reconciliation_handles_empty_tables():
+    tables = _ledger_fixture_tables()
+    empty = {
+        name: table.iloc[0:0].copy() for name, table in tables.items()
+    }
+    result = _table_reconciliation(empty, _ledger_for_tables(empty))
+
+    assert all(record["total_rows"] == 0 for record in result["tables"])
+    assert all(
+        record["reconciliation_status"] == "PASS"
+        for record in result["tables"]
+    )
+    assert result["overall"]["total_rows"] == 0
+    assert result["overall"]["reconciliation_status"] == "PASS"
+
+
+def test_table_reconciliation_reports_missing_duplicate_and_unknown_rows():
+    tables = _ledger_fixture_tables()
+    ledger = _ledger_for_tables(tables)
+
+    missing = ledger.iloc[1:].copy()
+    missing_result = _table_reconciliation(tables, missing)
+    missing_record = next(
+        record
+        for record in missing_result["tables"]
+        if record["source_table"] == ledger.iloc[0]["source_table"]
+    )
+    assert missing_record["missing_ledger_rows"] == 1
+    assert missing_record["excluded_minus_ledger_rows"] == 1
+    assert missing_record["reconciliation_status"] == "FAIL"
+    assert missing_result["overall"]["reconciliation_status"] == "FAIL"
+
+    duplicated = pd.concat([ledger, ledger.iloc[[0]]], ignore_index=True)
+    duplicate_result = _table_reconciliation(tables, duplicated)
+    duplicate_record = next(
+        record
+        for record in duplicate_result["tables"]
+        if record["source_table"] == ledger.iloc[0]["source_table"]
+    )
+    assert duplicate_record["duplicate_ledger_rows"] == 1
+    assert duplicate_record["excluded_minus_ledger_rows"] == -1
+    assert duplicate_record["reconciliation_status"] == "FAIL"
+    assert duplicate_result["overall"]["reconciliation_status"] == "FAIL"
+
+    unknown_row = ledger.iloc[[0]].copy()
+    unknown_row["source_table"] = "unknown_cohort"
+    unknown_row["ledger_id"] = "unknown_cohort|unit=1"
+    with_unknown = pd.concat([ledger, unknown_row], ignore_index=True)
+    unknown_result = _table_reconciliation(tables, with_unknown)
+    assert unknown_result["overall"]["unknown_source_table_rows"] == 1
+    assert unknown_result["overall"]["unknown_source_tables"] == [
+        "unknown_cohort"
+    ]
+    assert unknown_result["overall"]["reconciliation_status"] == "FAIL"
