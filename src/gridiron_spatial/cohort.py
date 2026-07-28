@@ -2351,19 +2351,199 @@ def _distribution(values: pd.Series) -> dict[str, float | int] | None:
     }
 
 
-def _validate_game_splits(source: pd.DataFrame) -> None:
-    if source.duplicated(PLAY_KEYS).any():
-        duplicates = int(source.duplicated(PLAY_KEYS, keep=False).sum())
+def _validate_game_splits(
+    tables: Mapping[str, pd.DataFrame],
+) -> dict[str, Any]:
+    """Validate week-derived splits across all frozen cohort tables."""
+
+    expected_names = set(COHORT_TABLE_NAMES)
+    supplied_names = set(tables)
+    if supplied_names != expected_names:
         raise AuditError(
-            f"Play keys cross weekly partitions or are duplicated: {duplicates}"
+            "Split validation requires exactly the six frozen tables: "
+            f"missing={sorted(expected_names - supplied_names)}, "
+            f"unexpected={sorted(supplied_names - expected_names)}"
         )
-    game_splits = source.groupby("game_id", observed=True)["split"].nunique()
-    if game_splits.gt(1).any():
-        games = sorted(game_splits.loc[game_splits.gt(1)].index.astype(str))
-        raise AuditError(f"Games cross chronological splits: {games[:10]}")
-    play_splits = source.groupby(PLAY_KEYS, observed=True)["split"].nunique()
-    if play_splits.gt(1).any():
-        raise AuditError("At least one play crosses chronological splits.")
+    required_columns = {
+        "game_id", "play_id", "week", "week_number", "split"
+    }
+    chunks: list[pd.DataFrame] = []
+    for name in COHORT_TABLE_NAMES:
+        missing = sorted(required_columns - set(tables[name].columns))
+        if missing:
+            raise AuditError(f"{name} is missing split columns: {missing}")
+        chunk = tables[name][sorted(required_columns)].copy()
+        chunk["source_table"] = name
+        chunks.append(chunk)
+    combined = pd.concat(chunks, ignore_index=True)
+
+    result: dict[str, Any] = {
+        "status": "PASS",
+        "games_checked": 0,
+        "plays_checked": 0,
+        "cross_split_games": [],
+        "row_game_split_conflicts": [],
+        "chronological_violations": [],
+        "unknown_split_labels": [],
+        "invalid_week_values": [],
+    }
+    if combined.empty:
+        return result
+
+    combined["game_id"] = combined["game_id"].astype("string")
+    combined["play_id"] = combined["play_id"].astype("string")
+    combined["_week"] = combined["week"].astype("string")
+    combined["_split"] = combined["split"].astype("string")
+    combined["_week_number"] = pd.to_numeric(
+        combined["week_number"], errors="coerce"
+    )
+    valid_game = combined["game_id"].notna()
+    valid_play = valid_game & combined["play_id"].notna()
+    result["games_checked"] = int(
+        combined.loc[valid_game, "game_id"].nunique()
+    )
+    result["plays_checked"] = int(
+        len(combined.loc[valid_play, PLAY_KEYS].drop_duplicates())
+    )
+
+    week_number_from_label = combined["_week"].map(
+        {label: int(label[-2:]) for label in EXPECTED_WEEKS}
+    )
+    valid_week_number = (
+        combined["_week_number"].notna()
+        & np.isfinite(combined["_week_number"])
+        & combined["_week_number"].eq(
+            np.floor(combined["_week_number"])
+        )
+        & combined["_week_number"].eq(week_number_from_label)
+    )
+    valid_week = combined["_week"].isin(EXPECTED_WEEKS) & valid_week_number
+    known_split = combined["_split"].isin(
+        ["development_train", "validation", "frozen_test"]
+    )
+    expected_split = combined["_week"].map(
+        {label: split_for_week(label) for label in EXPECTED_WEEKS}
+    ).astype("string")
+
+    def clean(value: Any) -> Any:
+        return None if pd.isna(value) else value.item() if hasattr(value, "item") else value
+
+    def diagnostic_records(
+        mask: pd.Series,
+        columns: list[str],
+        rename: Mapping[str, str] | None = None,
+    ) -> list[dict[str, Any]]:
+        selected = combined.loc[mask, columns].drop_duplicates()
+        selected = selected.sort_values(
+            columns, kind="stable", na_position="first"
+        )
+        records: list[dict[str, Any]] = []
+        for row in selected.to_dict("records"):
+            records.append(
+                {
+                    (rename or {}).get(key, key): clean(value)
+                    for key, value in row.items()
+                }
+            )
+        return records
+
+    result["unknown_split_labels"] = diagnostic_records(
+        ~known_split,
+        ["source_table", "game_id", "play_id", "_week", "_split"],
+        {"_week": "week", "_split": "split"},
+    )
+    result["invalid_week_values"] = diagnostic_records(
+        ~valid_week,
+        [
+            "source_table",
+            "game_id",
+            "play_id",
+            "_week",
+            "_week_number",
+            "_split",
+        ],
+        {
+            "_week": "week",
+            "_week_number": "week_number",
+            "_split": "split",
+        },
+    )
+
+    chronological_mask = (
+        valid_week & known_split & combined["_split"].ne(expected_split)
+    )
+    chronological = combined.loc[
+        chronological_mask,
+        ["source_table", "game_id", "play_id", "_week", "_split"],
+    ].copy()
+    chronological["expected_split"] = expected_split.loc[
+        chronological_mask
+    ]
+    chronological = chronological.drop_duplicates().sort_values(
+        ["_week", "source_table", "game_id", "play_id", "_split"],
+        kind="stable",
+    )
+    result["chronological_violations"] = [
+        {
+            "source_table": clean(row["source_table"]),
+            "game_id": clean(row["game_id"]),
+            "play_id": clean(row["play_id"]),
+            "week": clean(row["_week"]),
+            "split": clean(row["_split"]),
+            "expected_split": clean(row["expected_split"]),
+        }
+        for row in chronological.to_dict("records")
+    ]
+
+    valid_assignments = combined.loc[
+        valid_game & known_split,
+        ["source_table", "game_id", "play_id", "_week", "_split"],
+    ]
+    cross_split_games: list[dict[str, Any]] = []
+    for game_id, group in valid_assignments.groupby(
+        "game_id", sort=True, observed=True
+    ):
+        splits = sorted(group["_split"].dropna().unique().tolist())
+        if len(splits) > 1:
+            cross_split_games.append(
+                {
+                    "game_id": str(game_id),
+                    "weeks": sorted(group["_week"].dropna().unique().tolist()),
+                    "splits": splits,
+                }
+            )
+    result["cross_split_games"] = cross_split_games
+
+    play_conflicts: list[dict[str, Any]] = []
+    for (game_id, play_id), group in valid_assignments.loc[
+        valid_assignments["play_id"].notna()
+    ].groupby(PLAY_KEYS, sort=True, observed=True):
+        splits = sorted(group["_split"].dropna().unique().tolist())
+        if len(splits) > 1:
+            play_conflicts.append(
+                {
+                    "game_id": str(game_id),
+                    "play_id": str(play_id),
+                    "weeks": sorted(group["_week"].dropna().unique().tolist()),
+                    "splits": splits,
+                    "source_tables": sorted(
+                        group["source_table"].unique().tolist()
+                    ),
+                }
+            )
+    result["row_game_split_conflicts"] = play_conflicts
+    if any(
+        result[field]
+        for field in (
+            "cross_split_games",
+            "row_game_split_conflicts",
+            "chronological_violations",
+            "unknown_split_labels",
+            "invalid_week_values",
+        )
+    ):
+        result["status"] = "FAIL"
+    return result
 
 
 FULL_RELEASE_REFERENCE = {

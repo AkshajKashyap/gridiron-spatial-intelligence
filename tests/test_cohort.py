@@ -7,6 +7,7 @@ from gridiron_spatial.cohort import (
     TABLE_KEY_COLUMNS,
     TABLE_SCHEMAS,
     _table_reconciliation,
+    _validate_game_splits,
     build_exclusion_ledger,
     build_week_cohorts,
     phase_qualified_entity_frame_keys,
@@ -556,3 +557,148 @@ def test_table_reconciliation_reports_missing_duplicate_and_unknown_rows():
         "unknown_cohort"
     ]
     assert unknown_result["overall"]["reconciliation_status"] == "FAIL"
+
+
+SPLIT_RESULT_SCHEMA = [
+    "status",
+    "games_checked",
+    "plays_checked",
+    "cross_split_games",
+    "row_game_split_conflicts",
+    "chronological_violations",
+    "unknown_split_labels",
+    "invalid_week_values",
+]
+SPLIT_COLUMNS = ["game_id", "play_id", "week", "week_number", "split"]
+
+
+def _split_row(game_id, play_id, week, split):
+    return {
+        "game_id": game_id,
+        "play_id": play_id,
+        "week": week,
+        "week_number": None if week is None else int(week[-2:]),
+        "split": split,
+    }
+
+
+def _empty_split_tables():
+    return {
+        name: pd.DataFrame(columns=SPLIT_COLUMNS)
+        for name in COHORT_TABLE_NAMES
+    }
+
+
+def _valid_split_tables():
+    tables = _empty_split_tables()
+    rows = [
+        _split_row("1", "10", "2023_w01", "development_train"),
+        _split_row("2", "20", "2023_w13", "validation"),
+        _split_row("3", "30", "2023_w16", "frozen_test"),
+    ]
+    tables["source_plays"] = pd.DataFrame(rows)
+    tables["descriptive_target_frames"] = pd.DataFrame([rows[0]])
+    tables["primary_origins"] = pd.DataFrame([rows[1]])
+    tables["trajectory_eligibility"] = pd.DataFrame([rows[2]])
+    tables["future_separation_eligibility"] = pd.DataFrame([rows[0]])
+    tables["pair_exclusions"] = pd.DataFrame([rows[1]])
+    return tables
+
+
+def test_validate_game_splits_valid_empty_and_row_order_independent():
+    tables = _valid_split_tables()
+    result = _validate_game_splits(tables)
+
+    assert list(result) == SPLIT_RESULT_SCHEMA
+    assert result == {
+        "status": "PASS",
+        "games_checked": 3,
+        "plays_checked": 3,
+        "cross_split_games": [],
+        "row_game_split_conflicts": [],
+        "chronological_violations": [],
+        "unknown_split_labels": [],
+        "invalid_week_values": [],
+    }
+
+    shuffled = {
+        name: table.sample(frac=1, random_state=7).reset_index(drop=True)
+        for name, table in tables.items()
+    }
+    assert _validate_game_splits(shuffled) == result
+
+    empty_result = _validate_game_splits(_empty_split_tables())
+    assert list(empty_result) == SPLIT_RESULT_SCHEMA
+    assert empty_result["status"] == "PASS"
+    assert empty_result["games_checked"] == 0
+    assert empty_result["plays_checked"] == 0
+
+
+def test_validate_game_splits_detects_game_and_play_conflicts():
+    game_crossing = _empty_split_tables()
+    game_crossing["source_plays"] = pd.DataFrame(
+        [
+            _split_row("1", "10", "2023_w01", "development_train"),
+            _split_row("1", "20", "2023_w13", "validation"),
+        ]
+    )
+    game_result = _validate_game_splits(game_crossing)
+    assert game_result["status"] == "FAIL"
+    assert game_result["cross_split_games"] == [
+        {
+            "game_id": "1",
+            "weeks": ["2023_w01", "2023_w13"],
+            "splits": ["development_train", "validation"],
+        }
+    ]
+    assert game_result["row_game_split_conflicts"] == []
+
+    play_crossing = _empty_split_tables()
+    play_crossing["source_plays"] = pd.DataFrame(
+        [_split_row("2", "20", "2023_w01", "development_train")]
+    )
+    play_crossing["descriptive_target_frames"] = pd.DataFrame(
+        [_split_row("2", "20", "2023_w13", "validation")]
+    )
+    play_result = _validate_game_splits(play_crossing)
+    assert play_result["status"] == "FAIL"
+    assert len(play_result["cross_split_games"]) == 1
+    assert play_result["row_game_split_conflicts"] == [
+        {
+            "game_id": "2",
+            "play_id": "20",
+            "weeks": ["2023_w01", "2023_w13"],
+            "splits": ["development_train", "validation"],
+            "source_tables": [
+                "descriptive_target_frames",
+                "source_plays",
+            ],
+        }
+    ]
+
+
+def test_validate_game_splits_detects_chronology_unknown_and_invalid_week():
+    tables = _empty_split_tables()
+    tables["source_plays"] = pd.DataFrame(
+        [
+            _split_row("4", "40", "2023_w13", "development_train"),
+            _split_row("5", "50", "2023_w16", "validation"),
+            _split_row("6", "60", "2023_w01", "unknown_split"),
+            _split_row("7", "70", None, "development_train"),
+        ]
+    )
+    result = _validate_game_splits(tables)
+
+    assert result["status"] == "FAIL"
+    assert [
+        (record["week"], record["split"], record["expected_split"])
+        for record in result["chronological_violations"]
+    ] == [
+        ("2023_w13", "development_train", "validation"),
+        ("2023_w16", "validation", "frozen_test"),
+    ]
+    assert len(result["unknown_split_labels"]) == 1
+    assert result["unknown_split_labels"][0]["split"] == "unknown_split"
+    assert len(result["invalid_week_values"]) == 1
+    assert result["invalid_week_values"][0]["week"] is None
+    assert result["invalid_week_values"][0]["week_number"] is None
