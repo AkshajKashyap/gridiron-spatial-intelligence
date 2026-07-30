@@ -169,12 +169,49 @@ def _key_records(
     ]
 
 
-def _same_value(left: Any, right: Any) -> bool:
-    if pd.isna(left) and pd.isna(right):
-        return True
-    if pd.isna(left) or pd.isna(right):
-        return False
-    return bool(left == right)
+def _raw_field_mismatch_counts(
+    raw_frame: pd.DataFrame,
+    normalized_frame: pd.DataFrame,
+    raw_keys: list[tuple[str, str, str, int, str]],
+    normalized_keys: list[tuple[str, str, str, int, str]],
+    raw_fields: list[str],
+) -> dict[str, int]:
+    """Compare immutable fields after a deduplicated one-to-one key alignment."""
+
+    raw_compare = raw_frame.loc[:, raw_fields].copy()
+    raw_compare.insert(
+        0, "_alignment_key", pd.Series(raw_keys, index=raw_frame.index)
+    )
+    normalized_compare = normalized_frame.loc[:, raw_fields].copy()
+    normalized_compare.insert(
+        0,
+        "_alignment_key",
+        pd.Series(normalized_keys, index=normalized_frame.index),
+    )
+    raw_compare = raw_compare.drop_duplicates(
+        "_alignment_key", keep="first"
+    )
+    normalized_compare = normalized_compare.drop_duplicates(
+        "_alignment_key", keep="first"
+    )
+    aligned = raw_compare.merge(
+        normalized_compare,
+        on="_alignment_key",
+        how="inner",
+        suffixes=("_raw", "_normalized"),
+        sort=False,
+        validate="one_to_one",
+    )
+
+    mismatch_counts: dict[str, int] = {}
+    for field in raw_fields:
+        raw_values = aligned[f"{field}_raw"]
+        normalized_values = aligned[f"{field}_normalized"]
+        matches = raw_values.eq(normalized_values) | (
+            raw_values.isna() & normalized_values.isna()
+        )
+        mismatch_counts[field] = int((~matches.fillna(False)).sum())
+    return mismatch_counts
 
 
 def _ordered_counts(
@@ -219,22 +256,13 @@ def reconcile_normalized_entity_frames(
         pd.Series(normalized_keys, dtype=object).duplicated(keep=False).sum()
     )
 
-    raw_positions: dict[tuple[str, str, str, int, str], int] = {}
-    normalized_positions: dict[tuple[str, str, str, int, str], int] = {}
-    for position, key in enumerate(raw_keys):
-        raw_positions.setdefault(key, position)
-    for position, key in enumerate(normalized_keys):
-        normalized_positions.setdefault(key, position)
-
-    mismatch_counts = {}
-    for field in raw_fields:
-        mismatch_counts[field] = sum(
-            not _same_value(
-                raw_frame.iloc[raw_positions[key]][field],
-                normalized_frame.iloc[normalized_positions[key]][field],
-            )
-            for key in sorted(raw_key_set & normalized_key_set)
-        )
+    mismatch_counts = _raw_field_mismatch_counts(
+        raw_frame,
+        normalized_frame,
+        raw_keys,
+        normalized_keys,
+        raw_fields,
+    )
 
     coordinate_counts = {
         column: _ordered_counts(

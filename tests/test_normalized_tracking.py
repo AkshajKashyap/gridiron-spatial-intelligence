@@ -1,4 +1,5 @@
 import copy
+import time
 
 import numpy as np
 import pandas as pd
@@ -218,3 +219,83 @@ def test_reconciliation_detects_duplicate_and_incorrect_provenance():
     result = reconcile_normalized_entity_frames(raw, invalid_promoted)
     assert result["status"] == "FAIL"
     assert result["invalid_raw_to_nominal_normalized"] == 1
+
+
+def test_vectorized_raw_field_reconciliation_scales_and_is_null_safe():
+    row_count = 100_000
+    positions = np.arange(row_count)
+    direction_angles = np.mod(positions.astype(float), 360.0)
+    direction_angles[::10_000] = np.nan
+    raw = pd.DataFrame(
+        {
+            "game_id": np.full(row_count, "1", dtype=object),
+            "play_id": np.full(row_count, "10", dtype=object),
+            "phase": np.where(positions % 2 == 0, "input", "output"),
+            "frame_id": positions // 2 + 1,
+            "nfl_id": np.full(row_count, "101", dtype=object),
+            "week": np.full(row_count, "2023_w01", dtype=object),
+            "week_number": np.ones(row_count, dtype=int),
+            "split": np.full(
+                row_count, "development_train", dtype=object
+            ),
+            "player_side": np.full(row_count, "Offense", dtype=object),
+            "player_role": np.full(
+                row_count, "Targeted Receiver", dtype=object
+            ),
+            "player_position": np.full(row_count, "WR", dtype=object),
+            "player_to_predict": np.ones(row_count, dtype=bool),
+            "play_direction": np.where(
+                positions % 2 == 0, "right", "left"
+            ),
+            "x": 10.0 + np.mod(positions, 100) / 10.0,
+            "y": np.full(row_count, 20.0),
+            "dir": direction_angles,
+            "o": np.full(row_count, np.nan),
+        }
+    )
+    normalized = freeze_normalized_entity_frames(
+        add_normalized_coordinates(raw)
+    )
+    raw_before = raw.copy(deep=True)
+    normalized_before = normalized.copy(deep=True)
+
+    started = time.perf_counter()
+    matching = reconcile_normalized_entity_frames(raw, normalized)
+    elapsed = time.perf_counter() - started
+
+    assert elapsed < 10.0
+    assert matching["status"] == "PASS"
+    assert matching["raw_field_mismatch_counts"] == {
+        "x": 0,
+        "y": 0,
+        "dir": 0,
+        "o": 0,
+        "play_direction": 0,
+        "phase": 0,
+    }
+
+    changed_x = normalized.copy(deep=True)
+    changed_x.loc[1, "x"] += 1.0
+    assert reconcile_normalized_entity_frames(
+        raw, changed_x
+    )["raw_field_mismatch_counts"]["x"] == 1
+
+    changed_direction = normalized.copy(deep=True)
+    changed_direction.loc[1, "play_direction"] = "right"
+    assert reconcile_normalized_entity_frames(
+        raw, changed_direction
+    )["raw_field_mismatch_counts"]["play_direction"] == 1
+
+    one_sided_null = normalized.copy(deep=True)
+    one_sided_null.loc[0, "dir"] = 1.0
+    assert reconcile_normalized_entity_frames(
+        raw, one_sided_null
+    )["raw_field_mismatch_counts"]["dir"] == 1
+
+    shuffled = normalized.sample(frac=1.0, random_state=7)
+    shuffled_result = reconcile_normalized_entity_frames(raw, shuffled)
+    assert not any(shuffled_result["raw_field_mismatch_counts"].values())
+    assert shuffled_result["row_order_preserved"] is False
+
+    pd.testing.assert_frame_equal(raw, raw_before)
+    pd.testing.assert_frame_equal(normalized, normalized_before)
