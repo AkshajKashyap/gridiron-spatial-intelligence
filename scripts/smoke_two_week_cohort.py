@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 import time
+from collections.abc import Sequence
 from pathlib import Path
 
 import pandas as pd
@@ -36,7 +38,32 @@ DATASET_ROOT = (
     / "bdb_2026"
     / "114239_nfl_competition_files_published_analytics_final"
 )
-WEEKS = ("2023_w01", "2023_w02")
+SUPPORTED_WEEKS = tuple(f"2023_w{week:02d}" for week in range(1, 19))
+
+
+def parse_week_args(args: Sequence[str]) -> tuple[str, ...]:
+    """Parse and validate an explicit chronological list of release weeks."""
+
+    parser = argparse.ArgumentParser(
+        description="Run an artifact-free cohort smoke test for supplied weeks."
+    )
+    parser.add_argument("weeks", nargs="+", metavar="2023_wNN")
+    weeks = tuple(parser.parse_args(list(args)).weeks)
+
+    invalid = [week for week in weeks if week not in SUPPORTED_WEEKS]
+    if invalid:
+        parser.error(
+            "week identifiers must use 2023_w01 through 2023_w18; "
+            f"invalid: {invalid}"
+        )
+    duplicates = sorted(
+        {week for week in weeks if weeks.count(week) > 1}
+    )
+    if duplicates:
+        parser.error(f"duplicate week identifiers: {duplicates}")
+    if weeks != tuple(sorted(weeks)):
+        parser.error("week identifiers must be supplied in chronological order")
+    return weeks
 
 
 def _read_tracking(path: Path, usecols: list[str]) -> pd.DataFrame:
@@ -70,7 +97,7 @@ def _validate_tables(tables: dict[str, pd.DataFrame]) -> dict[str, int]:
     return duplicate_counts
 
 
-def main() -> int:
+def _run_weeks(weeks: tuple[str, ...]) -> int:
     total_started = time.perf_counter()
     supplementary_source = pd.read_csv(
         DATASET_ROOT / "supplementary_data.csv",
@@ -80,7 +107,7 @@ def main() -> int:
     )
     weekly: dict[str, dict[str, object]] = {}
 
-    for week in WEEKS:
+    for week in weeks:
         week_started = time.perf_counter()
         inputs = _read_tracking(
             DATASET_ROOT / "train" / f"input_{week}.csv",
@@ -133,19 +160,19 @@ def main() -> int:
             "reconciliation_status": status,
         }
 
-    if tuple(weekly) != WEEKS:
+    if tuple(weekly) != weeks:
         raise RuntimeError(f"Unexpected processed weeks: {tuple(weekly)}")
 
     aggregate_tables = {
         name: pd.concat(
-            [weekly[week]["tables"][name] for week in WEEKS],
+            [weekly[week]["tables"][name] for week in weeks],
             ignore_index=True,
         )
         for name in COHORT_TABLE_NAMES
     }
     duplicate_key_counts = _validate_tables(aggregate_tables)
     aggregate_ledger = pd.concat(
-        [weekly[week]["ledger"] for week in WEEKS],
+        [weekly[week]["ledger"] for week in weeks],
         ignore_index=True,
     )
     duplicate_ledger_ids = int(
@@ -163,7 +190,7 @@ def main() -> int:
     for name in COHORT_TABLE_NAMES:
         for metric in ("rows", "eligible", "excluded"):
             weekly_sum = sum(
-                weekly[week]["table_counts"][name][metric] for week in WEEKS
+                weekly[week]["table_counts"][name][metric] for week in weeks
             )
             if aggregate_counts[name][metric] != weekly_sum:
                 summed_weekly_totals_match = False
@@ -196,7 +223,7 @@ def main() -> int:
         }
 
     summary = {
-        "weeks": list(WEEKS),
+        "weeks": list(weeks),
         "weekly": {
             week: {
                 "runtime_seconds": weekly[week]["runtime_seconds"],
@@ -207,7 +234,7 @@ def main() -> int:
                     "reconciliation_status"
                 ],
             }
-            for week in WEEKS
+            for week in weeks
         },
         "total_runtime_seconds": round(
             time.perf_counter() - total_started, 3
@@ -235,6 +262,14 @@ def main() -> int:
     }
     print(json.dumps(summary, indent=2, sort_keys=False))
     return 0
+
+
+def main(args: Sequence[str] | None = None) -> int:
+    """Parse explicit week arguments and run exactly those weeks."""
+
+    return _run_weeks(
+        parse_week_args(sys.argv[1:] if args is None else args)
+    )
 
 
 if __name__ == "__main__":
