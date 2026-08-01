@@ -49,7 +49,7 @@ until their release task is completed and verified.
   artifacts.
 - [x] No document claims official coverage, completion probability, causality,
   betting value, or production readiness.
-- [ ] Aggregate-only data-free demo smoke — **pending Milestone 6 Task 4**.
+- [x] Aggregate-only data-free demo smoke passes deterministically.
 - [ ] CI status — **pending Milestone 6 Task 5**.
 
 ## Repository and release

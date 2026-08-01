@@ -111,6 +111,17 @@ With unchanged source evidence, rebuilding the manifest produces identical
 bytes. This workflow verifies aggregate results and provenance; it does not
 run the historical frozen evaluator.
 
+## Data-free portfolio demo
+
+```bash
+python scripts/run_portfolio_demo.py
+python scripts/run_portfolio_demo.py --check
+```
+
+The demo reads only tracked aggregate evidence. Its deterministic output is
+versioned at
+[reports/portfolio/release_0.1.0.md](reports/portfolio/release_0.1.0.md).
+
 ## Full-data requirements
 
 NFL competition data is not included. Raw files and derived Parquet tables are
