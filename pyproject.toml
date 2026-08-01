@@ -1,10 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "gridiron-spatial-intelligence"
 version = "0.1.0"
 description = "Spatiotemporal NFL player-tracking analytics and passing-window modeling"
 requires-python = ">=3.11"
-dependencies = ["pandas>=2.0", "scikit-learn"]
+dependencies = [
+    "numpy",
+    "pandas>=2.0",
+    "pyarrow",
+    "scikit-learn",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
