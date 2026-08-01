@@ -1,0 +1,68 @@
+# Release Checklist
+
+Target release: `gridiron-spatial-intelligence` `v0.1.0`.
+
+Checked items have direct repository evidence. Pending items must remain open
+until their release task is completed and verified.
+
+## Environment and package
+
+- [x] Fresh temporary environment installs with `python -m pip install -e ".[test]"`.
+- [x] `gridiron_spatial` imports from the temporary environment.
+- [ ] Run the complete pytest suite in the final release environment.
+- [ ] Compile all tracked Python under `src/`, `scripts/`, and `tests/`.
+- [x] `pip check` reports no broken requirements in the clean environment.
+- [x] Distribution name, version `0.1.0`, Python requirement, and runtime
+  dependencies agree with `pyproject.toml`.
+- [ ] Build and inspect the final wheel/sdist and import from the built package.
+- [ ] Run any adopted lint/type checks; none are configured yet.
+
+## Data-free release surface
+
+- [ ] Verify the README quickstart from a fresh clone.
+- [x] Packaging and release-evidence focused tests pass.
+- [x] Evidence-manifest tests prove deterministic byte-identical output.
+- [x] Rebuild the production manifest and preserve all nine source checksums.
+- [x] Confirm raw NFL data, Parquet, pair-level rows, predictions, and fitted
+  objects are not tracked.
+- [x] Confirm only the nine approved compact evidence JSON files and release
+  manifest are allowlisted.
+- [x] Confirm the evidence manifest contains only relative safe paths.
+
+## Frozen evidence
+
+- [x] Frozen evaluator execution count remains `1`.
+- [x] Frozen selections changed remains `0`.
+- [x] Frozen comparators changed remains `0`.
+- [x] Leakage validation remains `PASS`.
+- [x] Frozen reconciliation mismatch count remains `0`.
+- [x] Frozen-result checksum matches the release manifest.
+- [x] Release instructions never recommend rerunning the frozen evaluator for
+  selection.
+
+## Documentation and portfolio review
+
+- [x] README states the bounded research question, evidence, and limitations.
+- [x] Architecture, model card, evaluation methodology, reproducibility,
+  release checklist, and interview notes exist.
+- [x] Documentation links use tracked relative paths or approved release
+  artifacts.
+- [x] No document claims official coverage, completion probability, causality,
+  betting value, or production readiness.
+- [ ] Aggregate-only data-free demo smoke — **pending Milestone 6 Task 4**.
+- [ ] CI status — **pending Milestone 6 Task 5**.
+
+## Repository and release
+
+- [x] `git diff --check` passes for completed release-hardening tasks.
+- [ ] Confirm clean `git status` after intentional files are committed.
+- [ ] Confirm no unrelated generated package metadata remains modified.
+- [ ] Finalize release governance files required by the release decision.
+- [ ] Create release notes/changelog entry.
+- [ ] Create and verify the `v0.1.0` tag — **not yet executed**.
+
+## Release decision
+
+Do not tag while any release-blocking item above is open. Task 4 and Task 5
+are explicitly pending; this checklist does not mark them complete by
+anticipation.
