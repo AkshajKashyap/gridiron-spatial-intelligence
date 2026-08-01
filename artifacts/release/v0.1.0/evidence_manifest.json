@@ -1,0 +1,410 @@
+{
+  "manifest_format_version": "release_evidence_manifest_v1",
+  "release_version": "0.1.0",
+  "distribution_name": "gridiron-spatial-intelligence",
+  "evidence_policy": {
+    "versioned": "Compact aggregate evidence is versioned.",
+    "raw_data": "Raw NFL data is not versioned.",
+    "parquet": "Normalized or cohort Parquet files are not versioned.",
+    "row_level": "Pair-level rows and individual predictions are not versioned.",
+    "immutability": "Evidence JSON files are immutable once included in the release.",
+    "regeneration": "Analytical evidence may be regenerated only through the documented pipeline.",
+    "frozen_evaluation": "The one-time frozen evaluation must not be rerun for model selection.",
+    "checksum_review": "Checksum changes require explicit review and a new release decision."
+  },
+  "frozen_evaluation_policy": {
+    "selection_artifact": "artifacts/milestone_4/baseline_selection.json",
+    "frozen_result": "artifacts/milestone_4/frozen_test_result.json",
+    "frozen_evaluation_execution_count": 1,
+    "execution_count_source": "audit_authorization plus recorded evaluation result",
+    "frozen_selections_changed_count": 0,
+    "frozen_comparators_changed_count": 0,
+    "change_count_source": "selection_or_comparator_change_count",
+    "leakage_validation_status": "PASS",
+    "reconciliation_status": "PASS",
+    "reconciliation_mismatch_count": 0,
+    "final_for_release": "0.1.0",
+    "model_selection_rerun_permitted": false
+  },
+  "evidence_file_count": 9,
+  "evidence_files": [
+    {
+      "relative_path": "artifacts/milestone_2/cohorts/cohort_summary.json",
+      "semantic_role": "cohort validation summary",
+      "evidence_category": "provenance",
+      "sha256": "d88c2366a101ae79b2695b4663cf8ba0b804eb3e33a6dcbc43051ffbf4c1de53",
+      "byte_size": 5032,
+      "top_level_json_keys": [
+        "cohort_summary",
+        "reporting_summary"
+      ],
+      "declared_format_version": null,
+      "declared_validation_status": "PASS",
+      "processed_week_summary": {
+        "count": 18,
+        "first": "2023_w01",
+        "last": "2023_w18"
+      }
+    },
+    {
+      "relative_path": "artifacts/milestone_2/cohorts/manifest.json",
+      "semantic_role": "cohort artifact manifest",
+      "evidence_category": "provenance",
+      "sha256": "10accd0b47a057836700cc6967f2ce5e421ac232944364f28f33e5d452e5a3c4",
+      "byte_size": 12297,
+      "top_level_json_keys": [
+        "aggregate_reconciliation_status",
+        "artifact_format_version",
+        "cohort_summary_file",
+        "generation_timestamp_utc",
+        "observed_game_count",
+        "processed_weeks",
+        "project_claim_boundary",
+        "source_row_totals",
+        "split_validation_status",
+        "tables"
+      ],
+      "declared_format_version": "1.0",
+      "declared_validation_status": "PASS",
+      "processed_week_summary": {
+        "count": 18,
+        "first": "2023_w01",
+        "last": "2023_w18"
+      }
+    },
+    {
+      "relative_path": "artifacts/milestone_2/normalized_tracking/manifest.json",
+      "semantic_role": "normalized tracking artifact manifest",
+      "evidence_category": "provenance",
+      "sha256": "fc7dd76b03e775880bdcd896cd2c052dbf564cdb1fe37060ce5674ea487dcba4",
+      "byte_size": 17875,
+      "top_level_json_keys": [
+        "aggregate",
+        "artifact_format_version",
+        "coordinate_transform_version",
+        "frozen_key",
+        "frozen_schema",
+        "generation_timestamp_utc",
+        "partitions",
+        "processed_weeks",
+        "project_claim_boundary",
+        "requested_weeks",
+        "validation_status"
+      ],
+      "declared_format_version": "1.0",
+      "declared_validation_status": "PASS",
+      "processed_week_summary": {
+        "count": 18,
+        "first": "2023_w01",
+        "last": "2023_w18"
+      }
+    },
+    {
+      "relative_path": "artifacts/milestone_3/full_season_separation_summary.json",
+      "semantic_role": "full-season separation summary",
+      "evidence_category": "descriptive result",
+      "sha256": "4f0fd2474636924377e793ebe4df0b8340b0c87a5b3775dca1c3dd05db4bb718",
+      "byte_size": 89515,
+      "top_level_json_keys": [
+        "aggregate_counts",
+        "all_pair_results",
+        "analysis_format_version",
+        "claim_boundary",
+        "defender_count_bucket_results",
+        "fixed_definitions",
+        "generation_timestamp_utc",
+        "nearest_observed_defender_results",
+        "origin_separation_bucket_results",
+        "output_artifact",
+        "play_cluster_bootstrap_results",
+        "processed_weeks",
+        "runtime_by_week_seconds",
+        "source_artifact_versions",
+        "source_artifacts",
+        "split_results",
+        "total_runtime_seconds",
+        "validation_diagnostics",
+        "week_to_week_stability",
+        "weekly_results"
+      ],
+      "declared_format_version": "full_season_separation_summary_v1",
+      "declared_validation_status": "PASS",
+      "processed_week_summary": {
+        "count": 18,
+        "first": "2023_w01",
+        "last": "2023_w18"
+      }
+    },
+    {
+      "relative_path": "artifacts/milestone_4/baseline_selection.json",
+      "semantic_role": "audited baseline selection",
+      "evidence_category": "frozen selection",
+      "sha256": "5cea3a52a368a3517274e16229e285f359c0fb56c78e8c05bd641b269e6efa17",
+      "byte_size": 101049,
+      "top_level_json_keys": [
+        "actual_feature_list",
+        "claim_boundary",
+        "frozen_selections",
+        "frozen_test_weeks_accessed",
+        "generation_timestamp_utc",
+        "leakage_diagnostics",
+        "optional_categorical_fields",
+        "output_artifact",
+        "preprocessing_configuration",
+        "processed_weeks",
+        "reconciliation_diagnostics",
+        "registered_feature_list",
+        "registered_grids",
+        "result_format_version",
+        "runtime_by_week_seconds",
+        "sample_counts",
+        "selections",
+        "source_artifact_versions",
+        "total_runtime_seconds"
+      ],
+      "declared_format_version": "milestone_4_baseline_selection_v1",
+      "declared_validation_status": "PASS",
+      "processed_week_summary": {
+        "count": 15,
+        "first": "2023_w01",
+        "last": "2023_w15"
+      }
+    },
+    {
+      "relative_path": "artifacts/milestone_4/frozen_test_result.json",
+      "semantic_role": "one-time frozen-test result",
+      "evidence_category": "frozen evaluation",
+      "sha256": "ade2fa073f8cfdd859cac41ac112be560a2a2d90872c24f71f00c2532d3cf28e",
+      "byte_size": 48745,
+      "top_level_json_keys": [
+        "audit_authorization",
+        "bootstrap_configuration",
+        "claim_boundary",
+        "decision_evidence",
+        "development_target_summaries",
+        "development_weeks",
+        "evaluation_timestamp_utc",
+        "evaluations",
+        "frozen_selection_count",
+        "frozen_specifications",
+        "frozen_target_summaries",
+        "frozen_weeks",
+        "leakage_diagnostics",
+        "output_artifact",
+        "reconciliation_diagnostics",
+        "result_format_version",
+        "runtime_by_processed_week_seconds",
+        "selection_artifact",
+        "selection_or_comparator_change_count",
+        "selection_result_sha256",
+        "source_artifact_versions",
+        "total_runtime_seconds",
+        "validation_rows_used_for_fitting",
+        "validation_weeks_used_for_fitting"
+      ],
+      "declared_format_version": "milestone_4_frozen_test_result_v1",
+      "declared_validation_status": "PASS",
+      "processed_week_summary": null
+    },
+    {
+      "relative_path": "artifacts/milestone_5/model_interpretation_summary.json",
+      "semantic_role": "model interpretation summary",
+      "evidence_category": "interpretation result",
+      "sha256": "4134641302848bf9be0371b3928ccb247488d548980dcb8b3a33e551f050d39e",
+      "byte_size": 63023,
+      "top_level_json_keys": [
+        "binding_milestone_4_selection_checksum",
+        "bootstrap_resamples_per_model",
+        "bootstrap_seed",
+        "claim_boundary",
+        "development_weeks",
+        "fixed_ablation_definitions",
+        "frozen_test_weeks_accessed",
+        "generation_timestamp_utc",
+        "leakage_diagnostics",
+        "models",
+        "output_artifact",
+        "processed_weeks",
+        "reconciliation_diagnostics",
+        "registered_feature_list",
+        "result_format_version",
+        "runtime_by_week_seconds",
+        "sample_counts",
+        "selected_specifications",
+        "total_runtime_seconds",
+        "validation_weeks"
+      ],
+      "declared_format_version": "milestone_5_model_interpretation_v1",
+      "declared_validation_status": "PASS",
+      "processed_week_summary": {
+        "count": 15,
+        "first": "2023_w01",
+        "last": "2023_w15"
+      }
+    },
+    {
+      "relative_path": "artifacts/milestone_5/classifier_calibration_summary.json",
+      "semantic_role": "classifier calibration summary",
+      "evidence_category": "interpretation result",
+      "sha256": "975ff14a46e26e85afdfac5986c9be04899a7e68a9e9072729452953ecf4c5a6",
+      "byte_size": 33782,
+      "top_level_json_keys": [
+        "binding_milestone_4_selection_checksum",
+        "bootstrap_resamples_per_horizon",
+        "bootstrap_seed",
+        "claim_boundary",
+        "development_weeks",
+        "fixed_probability_bin_edges",
+        "frozen_classifier_specifications",
+        "frozen_test_weeks_accessed",
+        "generation_timestamp_utc",
+        "horizon_diagnostics",
+        "leakage_diagnostics",
+        "output_artifact",
+        "processed_weeks",
+        "reconciliation_diagnostics",
+        "result_format_version",
+        "runtime_by_week_seconds",
+        "sample_counts",
+        "total_runtime_seconds",
+        "validation_weeks"
+      ],
+      "declared_format_version": "milestone_5_classifier_calibration_v1",
+      "declared_validation_status": "PASS",
+      "processed_week_summary": {
+        "count": 15,
+        "first": "2023_w01",
+        "last": "2023_w15"
+      }
+    },
+    {
+      "relative_path": "artifacts/milestone_5/validation_error_summary.json",
+      "semantic_role": "validation error summary",
+      "evidence_category": "interpretation result",
+      "sha256": "3e538615481448234a8aaa87d695b439685e03b6a5801ff3d8de23e2195d0e08",
+      "byte_size": 90627,
+      "top_level_json_keys": [
+        "binding_milestone_4_selection_checksum",
+        "binding_specifications_and_comparators",
+        "bootstrap_resamples_per_adequate_bucket",
+        "bootstrap_seed",
+        "claim_boundary",
+        "classification_diagnostics",
+        "development_weeks",
+        "fixed_bucket_definitions",
+        "fixed_support_flag_definitions",
+        "frozen_test_weeks_accessed",
+        "generation_timestamp_utc",
+        "horizon_counts",
+        "leakage_diagnostics",
+        "output_artifact",
+        "processed_weeks",
+        "reconciliation_diagnostics",
+        "regression_diagnostics",
+        "result_format_version",
+        "runtime_by_week_seconds",
+        "total_runtime_seconds",
+        "validation_weeks"
+      ],
+      "declared_format_version": "milestone_5_validation_error_v1",
+      "declared_validation_status": "PASS",
+      "processed_week_summary": {
+        "count": 15,
+        "first": "2023_w01",
+        "last": "2023_w15"
+      }
+    }
+  ],
+  "cross_artifact_validation": {
+    "status": "PASS",
+    "checks": [
+      {
+        "check": "package_version",
+        "status": "PASS",
+        "actual": "0.1.0"
+      },
+      {
+        "check": "evidence_file_count",
+        "status": "PASS",
+        "actual": 9
+      },
+      {
+        "check": "all_json_object_rooted",
+        "status": "PASS",
+        "actual": 9
+      },
+      {
+        "check": "absolute_path_scan",
+        "status": "PASS",
+        "actual": "no unsafe paths"
+      },
+      {
+        "check": "maximum_file_size",
+        "status": "PASS",
+        "actual": 101049
+      },
+      {
+        "check": "selection_checksum",
+        "status": "PASS",
+        "actual": {
+          "declared": "5cea3a52a368a3517274e16229e285f359c0fb56c78e8c05bd641b269e6efa17",
+          "computed": "5cea3a52a368a3517274e16229e285f359c0fb56c78e8c05bd641b269e6efa17"
+        }
+      },
+      {
+        "check": "milestone_5_selection_checksums",
+        "status": "PASS",
+        "actual": {
+          "artifacts/milestone_5/model_interpretation_summary.json": "5cea3a52a368a3517274e16229e285f359c0fb56c78e8c05bd641b269e6efa17",
+          "artifacts/milestone_5/classifier_calibration_summary.json": "5cea3a52a368a3517274e16229e285f359c0fb56c78e8c05bd641b269e6efa17",
+          "artifacts/milestone_5/validation_error_summary.json": "5cea3a52a368a3517274e16229e285f359c0fb56c78e8c05bd641b269e6efa17"
+        }
+      },
+      {
+        "check": "frozen_execution_count",
+        "status": "PASS",
+        "actual": 1
+      },
+      {
+        "check": "frozen_selections_changed",
+        "status": "PASS",
+        "actual": 0
+      },
+      {
+        "check": "frozen_comparators_changed",
+        "status": "PASS",
+        "actual": 0
+      },
+      {
+        "check": "frozen_leakage",
+        "status": "PASS",
+        "actual": "PASS"
+      },
+      {
+        "check": "frozen_reconciliation",
+        "status": "PASS",
+        "actual": {
+          "status": "PASS",
+          "mismatch_count": 0
+        }
+      },
+      {
+        "check": "no_row_level_frozen_results",
+        "status": "PASS",
+        "actual": true
+      },
+      {
+        "check": "processed_week_boundaries",
+        "status": "PASS",
+        "actual": true
+      },
+      {
+        "check": "source_file_mutation_check",
+        "status": "PASS",
+        "actual": true
+      }
+    ]
+  },
+  "aggregate_byte_count": 461945,
+  "overall_validation_status": "PASS"
+}

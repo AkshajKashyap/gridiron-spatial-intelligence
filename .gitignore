@@ -15,6 +15,34 @@ artifacts/*
 !data/processed/.gitkeep
 !artifacts/.gitkeep
 
+# Compact, release-approved evidence only
+!artifacts/milestone_2/
+artifacts/milestone_2/*
+!artifacts/milestone_2/cohorts/
+artifacts/milestone_2/cohorts/*
+!artifacts/milestone_2/cohorts/cohort_summary.json
+!artifacts/milestone_2/cohorts/manifest.json
+!artifacts/milestone_2/normalized_tracking/
+artifacts/milestone_2/normalized_tracking/*
+!artifacts/milestone_2/normalized_tracking/manifest.json
+!artifacts/milestone_3/
+artifacts/milestone_3/*
+!artifacts/milestone_3/full_season_separation_summary.json
+!artifacts/milestone_4/
+artifacts/milestone_4/*
+!artifacts/milestone_4/baseline_selection.json
+!artifacts/milestone_4/frozen_test_result.json
+!artifacts/milestone_5/
+artifacts/milestone_5/*
+!artifacts/milestone_5/model_interpretation_summary.json
+!artifacts/milestone_5/classifier_calibration_summary.json
+!artifacts/milestone_5/validation_error_summary.json
+!artifacts/release/
+artifacts/release/*
+!artifacts/release/v0.1.0/
+artifacts/release/v0.1.0/*
+!artifacts/release/v0.1.0/evidence_manifest.json
+
 # Jupyter
 .ipynb_checkpoints/
 

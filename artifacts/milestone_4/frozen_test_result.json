@@ -1,0 +1,1539 @@
+{
+  "result_format_version": "milestone_4_frozen_test_result_v1",
+  "evaluation_timestamp_utc": "2026-07-31T01:50:53.429827Z",
+  "audit_authorization": "PASS \u2014 AUTHORIZE ONE-TIME FROZEN EVALUATION",
+  "selection_artifact": "artifacts/milestone_4/baseline_selection.json",
+  "selection_result_sha256": "5cea3a52a368a3517274e16229e285f359c0fb56c78e8c05bd641b269e6efa17",
+  "output_artifact": "artifacts/milestone_4/frozen_test_result.json",
+  "development_weeks": [
+    "2023_w01",
+    "2023_w02",
+    "2023_w03",
+    "2023_w04",
+    "2023_w05",
+    "2023_w06",
+    "2023_w07",
+    "2023_w08",
+    "2023_w09",
+    "2023_w10",
+    "2023_w11",
+    "2023_w12"
+  ],
+  "frozen_weeks": [
+    "2023_w16",
+    "2023_w17",
+    "2023_w18"
+  ],
+  "validation_weeks_used_for_fitting": [],
+  "validation_rows_used_for_fitting": 0,
+  "source_artifact_versions": {
+    "normalized_tracking": "1.0",
+    "coordinate_transform": "nfl_common_direction_v1",
+    "cohorts": "1.0"
+  },
+  "frozen_specifications": [
+    {
+      "population": "all_pairs",
+      "horizon": 5,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "log_loss",
+      "selection_validation_metric": 0.6324333825295708,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 0.675030595041527
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 5,
+      "task": "regression",
+      "selected_candidate": "multivariable_ols",
+      "selected_hyperparameter": null,
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "mae",
+      "selection_validation_metric": 1.215534668716613,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_linear",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 1.3108667320657965
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 10,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "log_loss",
+      "selection_validation_metric": 0.6287226318324819,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 0.6661752799381443
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 10,
+      "task": "regression",
+      "selected_candidate": "multivariable_ols",
+      "selected_hyperparameter": null,
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "mae",
+      "selection_validation_metric": 2.4248715288211287,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_linear",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 2.6429110764154875
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 15,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_0.1",
+      "selected_hyperparameter": {
+        "C": 0.1
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "log_loss",
+      "selection_validation_metric": 0.6168612455297858,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 0.6616946478463688
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 15,
+      "task": "regression",
+      "selected_candidate": "ridge_alpha_10",
+      "selected_hyperparameter": {
+        "alpha": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "mae",
+      "selection_validation_metric": 3.5333303361447808,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "training_median_constant",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [],
+      "comparator_validation_metric": 3.987881911146462
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 5,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "log_loss",
+      "selection_validation_metric": 0.602270781350041,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 0.6716220938746722
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 5,
+      "task": "regression",
+      "selected_candidate": "multivariable_ols",
+      "selected_hyperparameter": null,
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "mae",
+      "selection_validation_metric": 0.8296094775527065,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_linear",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 0.9471699378331694
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 10,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "log_loss",
+      "selection_validation_metric": 0.6112825156503859,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 0.6768597585747329
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 10,
+      "task": "regression",
+      "selected_candidate": "ridge_alpha_10",
+      "selected_hyperparameter": {
+        "alpha": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "mae",
+      "selection_validation_metric": 1.4576734098623803,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_linear",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 1.6504604532075042
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 15,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "log_loss",
+      "selection_validation_metric": 0.665049329439599,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [
+        "separation_origin"
+      ],
+      "comparator_validation_metric": 0.687657398903907
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 15,
+      "task": "regression",
+      "selected_candidate": "multivariable_ols",
+      "selected_hyperparameter": null,
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "primary_metric": "mae",
+      "selection_validation_metric": 1.7454899398773196,
+      "selection_timestamp_utc": "2026-07-30T23:22:41.354276Z",
+      "selected_feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "comparator_candidate": "training_median_constant",
+      "comparator_hyperparameter": null,
+      "comparator_feature_subset": [],
+      "comparator_validation_metric": 1.7907005664760425
+    }
+  ],
+  "frozen_selection_count": 12,
+  "selection_or_comparator_change_count": 0,
+  "development_target_summaries": [
+    {
+      "population": "all_pairs",
+      "horizon": 5,
+      "sample_count": 21216,
+      "play_count": 8648,
+      "separation_change_mean": -0.26569986714443505,
+      "separation_change_median": -0.25676830354163904,
+      "closing_rate": 0.5756975867269984
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 10,
+      "sample_count": 13488,
+      "play_count": 4837,
+      "separation_change_mean": -0.23790547319615943,
+      "separation_change_median": -0.22323093813699152,
+      "closing_rate": 0.5399614472123369
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 15,
+      "sample_count": 5320,
+      "play_count": 1722,
+      "separation_change_mean": 0.36208685796306195,
+      "separation_change_median": 0.02479379486039146,
+      "closing_rate": 0.49680451127819547
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 5,
+      "sample_count": 8402,
+      "play_count": 8402,
+      "separation_change_mean": -0.03143355945987419,
+      "separation_change_median": -0.07878185266841237,
+      "closing_rate": 0.5415377291121162
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 10,
+      "sample_count": 4769,
+      "play_count": 4769,
+      "separation_change_mean": 0.12709419410153847,
+      "separation_change_median": -0.06620781786207575,
+      "closing_rate": 0.5254770392115747
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 15,
+      "sample_count": 1717,
+      "play_count": 1717,
+      "separation_change_mean": 0.5573547803386832,
+      "separation_change_median": 0.02699388053074836,
+      "closing_rate": 0.49097262667443214
+    }
+  ],
+  "frozen_target_summaries": [
+    {
+      "population": "all_pairs",
+      "horizon": 5,
+      "sample_count": 5510,
+      "play_count": 2233,
+      "separation_change_mean": -0.17436662823594198,
+      "separation_change_median": -0.20791249393574418,
+      "closing_rate": 0.5642468239564429
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 10,
+      "sample_count": 3693,
+      "play_count": 1322,
+      "separation_change_mean": -0.050222518336749664,
+      "separation_change_median": -0.18261009218583446,
+      "closing_rate": 0.5318169509883564
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 15,
+      "sample_count": 1599,
+      "play_count": 506,
+      "separation_change_mean": 0.5551766399021293,
+      "separation_change_median": 0.15150012798378043,
+      "closing_rate": 0.47029393370856787
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 5,
+      "sample_count": 2161,
+      "play_count": 2161,
+      "separation_change_mean": -0.05656547161903805,
+      "separation_change_median": -0.11976977067402994,
+      "closing_rate": 0.5552984729291994
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 10,
+      "sample_count": 1300,
+      "play_count": 1300,
+      "separation_change_mean": 0.09208481013424807,
+      "separation_change_median": -0.09808935005646369,
+      "closing_rate": 0.5338461538461539
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 15,
+      "sample_count": 501,
+      "play_count": 501,
+      "separation_change_mean": 0.43457953381533754,
+      "separation_change_median": 0.0577437921722086,
+      "closing_rate": 0.4810379241516966
+    }
+  ],
+  "evaluations": [
+    {
+      "population": "all_pairs",
+      "horizon": 5,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 5510,
+        "play_count": 2233,
+        "separation_change_mean": -0.17436662823594198,
+        "separation_change_median": -0.20791249393574418,
+        "closing_rate": 0.5642468239564429
+      },
+      "selected_metrics": {
+        "log_loss": 0.6319357325624401,
+        "brier_score": 0.2187634927448333,
+        "roc_auc": 0.6953908049195219,
+        "accuracy_at_0_5": 0.6597096188747731
+      },
+      "comparator_metrics": {
+        "log_loss": 0.667315656355498,
+        "brier_score": 0.2375224215855641,
+        "roc_auc": 0.6049915006733686,
+        "accuracy_at_0_5": 0.5776769509981852
+      },
+      "metric_differences": {
+        "log_loss": -0.03537992379305799,
+        "brier_score": -0.0187589288407308
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "log_loss_difference": [
+          -0.04316619297593382,
+          -0.02632328848728294
+        ],
+        "brier_score_difference": [
+          -0.021879224117742426,
+          -0.015034886830757705
+        ]
+      }
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 5,
+      "task": "regression",
+      "selected_candidate": "multivariable_ols",
+      "selected_hyperparameter": null,
+      "comparator_candidate": "single_feature_linear",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 5510,
+        "play_count": 2233,
+        "separation_change_mean": -0.17436662823594198,
+        "separation_change_median": -0.20791249393574418,
+        "closing_rate": 0.5642468239564429
+      },
+      "selected_metrics": {
+        "mae": 1.222540655025531,
+        "rmse": 1.5938810848615026,
+        "median_absolute_error": 0.9630604946597995,
+        "r2": 0.15553993948310108
+      },
+      "comparator_metrics": {
+        "mae": 1.299371147479732,
+        "rmse": 1.675537236887591,
+        "median_absolute_error": 1.033405268309538,
+        "r2": 0.06679845631180381
+      },
+      "metric_differences": {
+        "mae": -0.07683049245420093
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "mae_difference": [
+          -0.09086921703451879,
+          -0.06315053233159353
+        ]
+      }
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 10,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 3693,
+        "play_count": 1322,
+        "separation_change_mean": -0.050222518336749664,
+        "separation_change_median": -0.18261009218583446,
+        "closing_rate": 0.5318169509883564
+      },
+      "selected_metrics": {
+        "log_loss": 0.6207050240799926,
+        "brier_score": 0.21510451396793098,
+        "roc_auc": 0.7135542129646536,
+        "accuracy_at_0_5": 0.6628757108042242
+      },
+      "comparator_metrics": {
+        "log_loss": 0.6591477033632889,
+        "brier_score": 0.23407562483675567,
+        "roc_auc": 0.6323828920570265,
+        "accuracy_at_0_5": 0.5827240725697265
+      },
+      "metric_differences": {
+        "log_loss": -0.038442679283296255,
+        "brier_score": -0.018971110868824692
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "log_loss_difference": [
+          -0.04843316517677478,
+          -0.028602010142005307
+        ],
+        "brier_score_difference": [
+          -0.023275953192042807,
+          -0.014678939262530416
+        ]
+      }
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 10,
+      "task": "regression",
+      "selected_candidate": "multivariable_ols",
+      "selected_hyperparameter": null,
+      "comparator_candidate": "single_feature_linear",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 3693,
+        "play_count": 1322,
+        "separation_change_mean": -0.050222518336749664,
+        "separation_change_median": -0.18261009218583446,
+        "closing_rate": 0.5318169509883564
+      },
+      "selected_metrics": {
+        "mae": 2.424683842840716,
+        "rmse": 3.1827385610896566,
+        "median_absolute_error": 1.8709806637767858,
+        "r2": 0.21060848712707658
+      },
+      "comparator_metrics": {
+        "mae": 2.635340876815735,
+        "rmse": 3.3736136474020157,
+        "median_absolute_error": 2.0986887847844717,
+        "r2": 0.11308661198869918
+      },
+      "metric_differences": {
+        "mae": -0.21065703397501911
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "mae_difference": [
+          -0.2465831466625222,
+          -0.17771372206477615
+        ]
+      }
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 15,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_0.1",
+      "selected_hyperparameter": {
+        "C": 0.1
+      },
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 1599,
+        "play_count": 506,
+        "separation_change_mean": 0.5551766399021293,
+        "separation_change_median": 0.15150012798378043,
+        "closing_rate": 0.47029393370856787
+      },
+      "selected_metrics": {
+        "log_loss": 0.6111499564636742,
+        "brier_score": 0.2110415874777261,
+        "roc_auc": 0.7309904795398026,
+        "accuracy_at_0_5": 0.6729205753595997
+      },
+      "comparator_metrics": {
+        "log_loss": 0.6619677004154001,
+        "brier_score": 0.2352453264717174,
+        "roc_auc": 0.6171994712250999,
+        "accuracy_at_0_5": 0.592245153220763
+      },
+      "metric_differences": {
+        "log_loss": -0.05081774395172589,
+        "brier_score": -0.02420373899399128
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "log_loss_difference": [
+          -0.06850965555340363,
+          -0.03382824677336887
+        ],
+        "brier_score_difference": [
+          -0.03183387484871979,
+          -0.017275260541947356
+        ]
+      }
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 15,
+      "task": "regression",
+      "selected_candidate": "ridge_alpha_10",
+      "selected_hyperparameter": {
+        "alpha": 10.0
+      },
+      "comparator_candidate": "training_median_constant",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 1599,
+        "play_count": 506,
+        "separation_change_mean": 0.5551766399021293,
+        "separation_change_median": 0.15150012798378043,
+        "closing_rate": 0.47029393370856787
+      },
+      "selected_metrics": {
+        "mae": 3.388623582924122,
+        "rmse": 4.562092820434091,
+        "median_absolute_error": 2.3782915276177112,
+        "r2": 0.2646348554734961
+      },
+      "comparator_metrics": {
+        "mae": 3.9207236274015553,
+        "rmse": 5.346384915330456,
+        "median_absolute_error": 2.909243673618647,
+        "r2": -0.009939252958933498
+      },
+      "metric_differences": {
+        "mae": -0.5321000444774335
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "mae_difference": [
+          -0.6660303654158701,
+          -0.4043769757088677
+        ]
+      }
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 5,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 2161,
+        "play_count": 2161,
+        "separation_change_mean": -0.05656547161903805,
+        "separation_change_median": -0.11976977067402994,
+        "closing_rate": 0.5552984729291994
+      },
+      "selected_metrics": {
+        "log_loss": 0.6056350151460916,
+        "brier_score": 0.20737093428676848,
+        "roc_auc": 0.7406928546652793,
+        "accuracy_at_0_5": 0.6982878297084683
+      },
+      "comparator_metrics": {
+        "log_loss": 0.6671451074242359,
+        "brier_score": 0.23753035425673452,
+        "roc_auc": 0.6072949184876865,
+        "accuracy_at_0_5": 0.5830633965756594
+      },
+      "metric_differences": {
+        "log_loss": -0.0615100922781443,
+        "brier_score": -0.030159419969966045
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "log_loss_difference": [
+          -0.07735500724803396,
+          -0.04831758386330261
+        ],
+        "brier_score_difference": [
+          -0.036655825666732596,
+          -0.024615462272330045
+        ]
+      }
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 5,
+      "task": "regression",
+      "selected_candidate": "multivariable_ols",
+      "selected_hyperparameter": null,
+      "comparator_candidate": "single_feature_linear",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 2161,
+        "play_count": 2161,
+        "separation_change_mean": -0.05656547161903805,
+        "separation_change_median": -0.11976977067402994,
+        "closing_rate": 0.5552984729291994
+      },
+      "selected_metrics": {
+        "mae": 0.8488831748995691,
+        "rmse": 1.1554326571670677,
+        "median_absolute_error": 0.5956005122423438,
+        "r2": 0.23357439963540993
+      },
+      "comparator_metrics": {
+        "mae": 0.9578883697563935,
+        "rmse": 1.2803754018895448,
+        "median_absolute_error": 0.7242720939520829,
+        "r2": 0.05885753342034228
+      },
+      "metric_differences": {
+        "mae": -0.10900519485682436
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "mae_difference": [
+          -0.130741482754549,
+          -0.09051823903390484
+        ]
+      }
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 10,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 1300,
+        "play_count": 1300,
+        "separation_change_mean": 0.09208481013424807,
+        "separation_change_median": -0.09808935005646369,
+        "closing_rate": 0.5338461538461539
+      },
+      "selected_metrics": {
+        "log_loss": 0.6210014423254951,
+        "brier_score": 0.2142817392811839,
+        "roc_auc": 0.721248133458879,
+        "accuracy_at_0_5": 0.6676923076923077
+      },
+      "comparator_metrics": {
+        "log_loss": 0.6710427278549266,
+        "brier_score": 0.2394441783860042,
+        "roc_auc": 0.6067768520367887,
+        "accuracy_at_0_5": 0.5638461538461539
+      },
+      "metric_differences": {
+        "log_loss": -0.050041285529431434,
+        "brier_score": -0.0251624391048203
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "log_loss_difference": [
+          -0.0673711308684457,
+          -0.03272954705871301
+        ],
+        "brier_score_difference": [
+          -0.0322823619388118,
+          -0.01813053995838772
+        ]
+      }
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 10,
+      "task": "regression",
+      "selected_candidate": "ridge_alpha_10",
+      "selected_hyperparameter": {
+        "alpha": 10.0
+      },
+      "comparator_candidate": "single_feature_linear",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 1300,
+        "play_count": 1300,
+        "separation_change_mean": 0.09208481013424807,
+        "separation_change_median": -0.09808935005646369,
+        "closing_rate": 0.5338461538461539
+      },
+      "selected_metrics": {
+        "mae": 1.4927730110953221,
+        "rmse": 2.1390444201692773,
+        "median_absolute_error": 1.0314308938936632,
+        "r2": 0.22262052307068347
+      },
+      "comparator_metrics": {
+        "mae": 1.6844604971134085,
+        "rmse": 2.343848625681741,
+        "median_absolute_error": 1.1529867874095805,
+        "r2": 0.06663269469706934
+      },
+      "metric_differences": {
+        "mae": -0.19168748601808638
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "mae_difference": [
+          -0.2370257879115137,
+          -0.1535020655692413
+        ]
+      }
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 15,
+      "task": "classification",
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "comparator_candidate": "single_feature_logistic",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 501,
+        "play_count": 501,
+        "separation_change_mean": 0.43457953381533754,
+        "separation_change_median": 0.0577437921722086,
+        "closing_rate": 0.4810379241516966
+      },
+      "selected_metrics": {
+        "log_loss": 0.651809868533897,
+        "brier_score": 0.22891301742171533,
+        "roc_auc": 0.6724704755825087,
+        "accuracy_at_0_5": 0.624750499001996
+      },
+      "comparator_metrics": {
+        "log_loss": 0.6874251810241908,
+        "brier_score": 0.24715096565207284,
+        "roc_auc": 0.5897143313118417,
+        "accuracy_at_0_5": 0.5429141716566867
+      },
+      "metric_differences": {
+        "log_loss": -0.035615312490293816,
+        "brier_score": -0.018237948230357515
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "log_loss_difference": [
+          -0.061128015341828774,
+          -0.00881349060430626
+        ],
+        "brier_score_difference": [
+          -0.029515170964010976,
+          -0.00730063072760555
+        ]
+      }
+    },
+    {
+      "population": "nearest_observed_defender",
+      "horizon": 15,
+      "task": "regression",
+      "selected_candidate": "multivariable_ols",
+      "selected_hyperparameter": null,
+      "comparator_candidate": "training_median_constant",
+      "comparator_hyperparameter": null,
+      "frozen_summary": {
+        "sample_count": 501,
+        "play_count": 501,
+        "separation_change_mean": 0.43457953381533754,
+        "separation_change_median": 0.0577437921722086,
+        "closing_rate": 0.4810379241516966
+      },
+      "selected_metrics": {
+        "mae": 1.5948300835386768,
+        "rmse": 2.390927287628865,
+        "median_absolute_error": 1.0401530359900526,
+        "r2": 0.18145860899927113
+      },
+      "comparator_metrics": {
+        "mae": 1.6021840354448473,
+        "rmse": 2.673935463667337,
+        "median_absolute_error": 0.8268112307595012,
+        "r2": -0.02378732933442884
+      },
+      "metric_differences": {
+        "mae": -0.007353951906170497
+      },
+      "play_cluster_bootstrap_95_intervals": {
+        "mae_difference": [
+          -0.10042950772088498,
+          0.07759693298481979
+        ]
+      }
+    }
+  ],
+  "decision_evidence": {
+    "units": [
+      {
+        "population": "all_pairs",
+        "horizon": 5,
+        "task": "classification",
+        "validation_selected_minus_comparator": -0.04259721251195614,
+        "frozen_selected_minus_comparator": -0.03537992379305799,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": true
+      },
+      {
+        "population": "all_pairs",
+        "horizon": 5,
+        "task": "regression",
+        "validation_selected_minus_comparator": -0.09533206334918343,
+        "frozen_selected_minus_comparator": -0.07683049245420093,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": true
+      },
+      {
+        "population": "all_pairs",
+        "horizon": 10,
+        "task": "classification",
+        "validation_selected_minus_comparator": -0.0374526481056624,
+        "frozen_selected_minus_comparator": -0.038442679283296255,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": true
+      },
+      {
+        "population": "all_pairs",
+        "horizon": 10,
+        "task": "regression",
+        "validation_selected_minus_comparator": -0.21803954759435884,
+        "frozen_selected_minus_comparator": -0.21065703397501911,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": true
+      },
+      {
+        "population": "all_pairs",
+        "horizon": 15,
+        "task": "classification",
+        "validation_selected_minus_comparator": -0.04483340231658295,
+        "frozen_selected_minus_comparator": -0.05081774395172589,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": false
+      },
+      {
+        "population": "all_pairs",
+        "horizon": 15,
+        "task": "regression",
+        "validation_selected_minus_comparator": -0.4545515750016813,
+        "frozen_selected_minus_comparator": -0.5321000444774335,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": false
+      },
+      {
+        "population": "nearest_observed_defender",
+        "horizon": 5,
+        "task": "classification",
+        "validation_selected_minus_comparator": -0.06935131252463123,
+        "frozen_selected_minus_comparator": -0.0615100922781443,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": true
+      },
+      {
+        "population": "nearest_observed_defender",
+        "horizon": 5,
+        "task": "regression",
+        "validation_selected_minus_comparator": -0.11756046028046285,
+        "frozen_selected_minus_comparator": -0.10900519485682436,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": true
+      },
+      {
+        "population": "nearest_observed_defender",
+        "horizon": 10,
+        "task": "classification",
+        "validation_selected_minus_comparator": -0.06557724292434697,
+        "frozen_selected_minus_comparator": -0.050041285529431434,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": true
+      },
+      {
+        "population": "nearest_observed_defender",
+        "horizon": 10,
+        "task": "regression",
+        "validation_selected_minus_comparator": -0.19278704334512398,
+        "frozen_selected_minus_comparator": -0.19168748601808638,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": true
+      },
+      {
+        "population": "nearest_observed_defender",
+        "horizon": 15,
+        "task": "classification",
+        "validation_selected_minus_comparator": -0.022608069464307934,
+        "frozen_selected_minus_comparator": -0.035615312490293816,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": false
+      },
+      {
+        "population": "nearest_observed_defender",
+        "horizon": 15,
+        "task": "regression",
+        "validation_selected_minus_comparator": -0.04521062659872288,
+        "frozen_selected_minus_comparator": -0.007353951906170497,
+        "frozen_primary_metric_improved": true,
+        "validation_and_frozen_direction_agree": true,
+        "outside_h15": false
+      }
+    ],
+    "confirmed_direction_count": 12,
+    "reversed_direction_count": 0,
+    "confirmed_outside_h15_count": 8
+  },
+  "bootstrap_configuration": {
+    "seed": 2026,
+    "resamples": 500,
+    "confidence_level": 0.95,
+    "unit": "play"
+  },
+  "leakage_diagnostics": {
+    "status": "PASS",
+    "development_weeks_exact": true,
+    "frozen_weeks_exact": true,
+    "validation_rows_used_for_fitting": 0,
+    "cross_split_game_play_count": 0,
+    "duplicate_sample_key_count": 0,
+    "feature_allowlist_exact": true,
+    "prohibited_feature_count": 0,
+    "preprocessing_fit_population": "development_train",
+    "deterministic_ordering": true,
+    "nonfinite_target_or_prediction_count": 0
+  },
+  "reconciliation_diagnostics": {
+    "status": "PASS",
+    "mismatch_count": 0,
+    "weekly": [
+      {
+        "week": "2023_w01",
+        "expected_horizon_pairs": 3420,
+        "constructed_horizon_pairs": 3420,
+        "sample_count": 3420,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w02",
+        "expected_horizon_pairs": 3443,
+        "constructed_horizon_pairs": 3443,
+        "sample_count": 3443,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w03",
+        "expected_horizon_pairs": 3909,
+        "constructed_horizon_pairs": 3909,
+        "sample_count": 3909,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w04",
+        "expected_horizon_pairs": 3310,
+        "constructed_horizon_pairs": 3310,
+        "sample_count": 3310,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w05",
+        "expected_horizon_pairs": 3243,
+        "constructed_horizon_pairs": 3243,
+        "sample_count": 3243,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w06",
+        "expected_horizon_pairs": 3398,
+        "constructed_horizon_pairs": 3398,
+        "sample_count": 3398,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w07",
+        "expected_horizon_pairs": 3063,
+        "constructed_horizon_pairs": 3063,
+        "sample_count": 3063,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w08",
+        "expected_horizon_pairs": 3626,
+        "constructed_horizon_pairs": 3626,
+        "sample_count": 3626,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w09",
+        "expected_horizon_pairs": 3060,
+        "constructed_horizon_pairs": 3060,
+        "sample_count": 3060,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w10",
+        "expected_horizon_pairs": 3177,
+        "constructed_horizon_pairs": 3177,
+        "sample_count": 3177,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w11",
+        "expected_horizon_pairs": 2919,
+        "constructed_horizon_pairs": 2919,
+        "sample_count": 2919,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w12",
+        "expected_horizon_pairs": 3456,
+        "constructed_horizon_pairs": 3456,
+        "sample_count": 3456,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w16",
+        "expected_horizon_pairs": 3993,
+        "constructed_horizon_pairs": 3993,
+        "sample_count": 3993,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w17",
+        "expected_horizon_pairs": 3620,
+        "constructed_horizon_pairs": 3620,
+        "sample_count": 3620,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w18",
+        "expected_horizon_pairs": 3189,
+        "constructed_horizon_pairs": 3189,
+        "sample_count": 3189,
+        "mismatch_count": 0
+      }
+    ],
+    "frozen_expected_count_source": "Milestone 3 full-season totals and audited development/validation counts"
+  },
+  "runtime_by_processed_week_seconds": {
+    "2023_w01": 0.536,
+    "2023_w02": 0.456,
+    "2023_w03": 0.485,
+    "2023_w04": 0.431,
+    "2023_w05": 0.416,
+    "2023_w06": 0.424,
+    "2023_w07": 0.385,
+    "2023_w08": 0.476,
+    "2023_w09": 0.439,
+    "2023_w10": 0.485,
+    "2023_w11": 0.488,
+    "2023_w12": 0.554,
+    "2023_w16": 0.619,
+    "2023_w17": 0.531,
+    "2023_w18": 0.501
+  },
+  "total_runtime_seconds": 8.927,
+  "claim_boundary": [
+    "Evaluation concerns future separation dynamics for competition-designated target-defender pairs.",
+    "It does not establish official coverage assignments.",
+    "It does not establish quarterback decision quality.",
+    "It does not estimate pass completion probability.",
+    "It does not establish causal defensive effectiveness.",
+    "It does not establish complete passing-window openness.",
+    "It does not establish betting value."
+  ]
+}

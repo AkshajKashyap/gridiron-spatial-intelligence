@@ -1,0 +1,630 @@
+{
+  "artifact_format_version": "1.0",
+  "generation_timestamp_utc": "2026-07-30T17:02:48.519424Z",
+  "coordinate_transform_version": "nfl_common_direction_v1",
+  "frozen_schema": [
+    "game_id",
+    "play_id",
+    "phase",
+    "frame_id",
+    "nfl_id",
+    "week",
+    "week_number",
+    "split",
+    "player_side",
+    "player_role",
+    "player_position",
+    "player_to_predict",
+    "play_direction",
+    "x",
+    "y",
+    "dir",
+    "o",
+    "x_norm",
+    "y_norm",
+    "dir_norm",
+    "o_norm",
+    "raw_coordinate_class",
+    "normalized_coordinate_class",
+    "coordinate_transform_version",
+    "coordinate_transform_applied"
+  ],
+  "frozen_key": [
+    "game_id",
+    "play_id",
+    "phase",
+    "frame_id",
+    "nfl_id"
+  ],
+  "requested_weeks": [
+    "2023_w01",
+    "2023_w02",
+    "2023_w03",
+    "2023_w04",
+    "2023_w05",
+    "2023_w06",
+    "2023_w07",
+    "2023_w08",
+    "2023_w09",
+    "2023_w10",
+    "2023_w11",
+    "2023_w12",
+    "2023_w13",
+    "2023_w14",
+    "2023_w15",
+    "2023_w16",
+    "2023_w17",
+    "2023_w18"
+  ],
+  "processed_weeks": [
+    "2023_w01",
+    "2023_w02",
+    "2023_w03",
+    "2023_w04",
+    "2023_w05",
+    "2023_w06",
+    "2023_w07",
+    "2023_w08",
+    "2023_w09",
+    "2023_w10",
+    "2023_w11",
+    "2023_w12",
+    "2023_w13",
+    "2023_w14",
+    "2023_w15",
+    "2023_w16",
+    "2023_w17",
+    "2023_w18"
+  ],
+  "partitions": [
+    {
+      "week": "2023_w01",
+      "relative_filename": "normalized_2023_w01.parquet",
+      "input_rows": 285714,
+      "output_rows": 32088,
+      "combined_rows": 317802,
+      "unique_games": 16,
+      "unique_plays": 819,
+      "file_size_bytes": 5555421,
+      "sha256": "dfe398b814937a5c4afe7a83ab55769dd321cc19654c1e152564b7a9dc72bf4b",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 317802,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 317802,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 168714,
+        "rotate_180_left": 149088
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w02",
+      "relative_filename": "normalized_2023_w02.parquet",
+      "input_rows": 288586,
+      "output_rows": 32180,
+      "combined_rows": 320766,
+      "unique_games": 16,
+      "unique_plays": 850,
+      "file_size_bytes": 5592187,
+      "sha256": "fa9c61c18674982e19522ec286715ef6bbcd1f3dade24eda654a99ba28af42c9",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 320766,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 320766,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 176192,
+        "rotate_180_left": 144574
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w03",
+      "relative_filename": "normalized_2023_w03.parquet",
+      "input_rows": 297757,
+      "output_rows": 36080,
+      "combined_rows": 333837,
+      "unique_games": 16,
+      "unique_plays": 904,
+      "file_size_bytes": 5759671,
+      "sha256": "b2062d6be546206202f6f257d3a142152e896a98c7ebf99c8ccb91ccf169f729",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 333834,
+        "extended_tolerance": 3,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 333834,
+        "extended_tolerance": 3,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 152498,
+        "rotate_180_left": 181339
+      },
+      "extended_tolerance_count": 3,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w04",
+      "relative_filename": "normalized_2023_w04.parquet",
+      "input_rows": 272475,
+      "output_rows": 30147,
+      "combined_rows": 302622,
+      "unique_games": 16,
+      "unique_plays": 779,
+      "file_size_bytes": 5332016,
+      "sha256": "e824f5a3563f120668958073dec20dbd4deddd40f2f7d2244f25e09b18dea410",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 302622,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 302622,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 171994,
+        "rotate_180_left": 130628
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w05",
+      "relative_filename": "normalized_2023_w05.parquet",
+      "input_rows": 254779,
+      "output_rows": 29319,
+      "combined_rows": 284098,
+      "unique_games": 14,
+      "unique_plays": 742,
+      "file_size_bytes": 5051087,
+      "sha256": "6c6fe12183d87fd1ca36ecbac0549111d475f8f238aa39074911158377c0920a",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 284098,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 284098,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 150836,
+        "rotate_180_left": 133262
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w06",
+      "relative_filename": "normalized_2023_w06.parquet",
+      "input_rows": 270676,
+      "output_rows": 31162,
+      "combined_rows": 301838,
+      "unique_games": 15,
+      "unique_plays": 793,
+      "file_size_bytes": 5313307,
+      "sha256": "2dd982d6c626ec94c994fe76e4c9ebcc6e2102ce24bfb706f8bd284c576192cf",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 301838,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 301838,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 149401,
+        "rotate_180_left": 152437
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w07",
+      "relative_filename": "normalized_2023_w07.parquet",
+      "input_rows": 233597,
+      "output_rows": 27443,
+      "combined_rows": 261040,
+      "unique_games": 13,
+      "unique_plays": 693,
+      "file_size_bytes": 4701605,
+      "sha256": "bedd260426c2e424cafa69be0538dd11f20c5aac30a30b96c8bc75277b7912f0",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 261040,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 261040,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 131026,
+        "rotate_180_left": 130014
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w08",
+      "relative_filename": "normalized_2023_w08.parquet",
+      "input_rows": 281011,
+      "output_rows": 33017,
+      "combined_rows": 314028,
+      "unique_games": 16,
+      "unique_plays": 827,
+      "file_size_bytes": 5486394,
+      "sha256": "f12ff7d11aab070dda8e63305ec60ca9e2304ee6978c70c3675b1f3b2a93f285",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 314028,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 314028,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 155248,
+        "rotate_180_left": 158780
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w09",
+      "relative_filename": "normalized_2023_w09.parquet",
+      "input_rows": 252796,
+      "output_rows": 28291,
+      "combined_rows": 281087,
+      "unique_games": 14,
+      "unique_plays": 711,
+      "file_size_bytes": 5015162,
+      "sha256": "2d53054b03ff4a871f4554bcc66a26138a86704e0e3c9da879f6f5338dafd41b",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 281087,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 281087,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 139017,
+        "rotate_180_left": 142070
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w10",
+      "relative_filename": "normalized_2023_w10.parquet",
+      "input_rows": 260372,
+      "output_rows": 29008,
+      "combined_rows": 289380,
+      "unique_games": 14,
+      "unique_plays": 721,
+      "file_size_bytes": 5138585,
+      "sha256": "3857302229ce9788a399482e200e18898d6605d6b9d8bf1e635ae881b66c705c",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 289380,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 289380,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 145729,
+        "rotate_180_left": 143651
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w11",
+      "relative_filename": "normalized_2023_w11.parquet",
+      "input_rows": 243413,
+      "output_rows": 27623,
+      "combined_rows": 271036,
+      "unique_games": 14,
+      "unique_plays": 707,
+      "file_size_bytes": 4851545,
+      "sha256": "f16d9a7f5b11297efe1832b2f4a1dac33f9b7b41b83f8ff8020c2cf9eac9ce98",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 271036,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 271036,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 125839,
+        "rotate_180_left": 145197
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w12",
+      "relative_filename": "normalized_2023_w12.parquet",
+      "input_rows": 294940,
+      "output_rows": 32156,
+      "combined_rows": 327096,
+      "unique_games": 16,
+      "unique_plays": 854,
+      "file_size_bytes": 5701708,
+      "sha256": "eb3e86623f72bd3254c919d9e2230a8f755c42947b5da7054fdae2003e540d8f",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 327096,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 327096,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 161521,
+        "rotate_180_left": 165575
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w13",
+      "relative_filename": "normalized_2023_w13.parquet",
+      "input_rows": 233755,
+      "output_rows": 29568,
+      "combined_rows": 263323,
+      "unique_games": 13,
+      "unique_plays": 666,
+      "file_size_bytes": 4722702,
+      "sha256": "967f7c6f3827f9083a2cdfc04eeb69fc8cb1df3f31f78e317614434c9449b3ec",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 263323,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 263323,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 139199,
+        "rotate_180_left": 124124
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w14",
+      "relative_filename": "normalized_2023_w14.parquet",
+      "input_rows": 279972,
+      "output_rows": 32873,
+      "combined_rows": 312845,
+      "unique_games": 15,
+      "unique_plays": 796,
+      "file_size_bytes": 5465148,
+      "sha256": "e105f04390440b10178cb20b8e63ea187b54c384de81ea121f5e926468439490",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 312845,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 312845,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 145804,
+        "rotate_180_left": 167041
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w15",
+      "relative_filename": "normalized_2023_w15.parquet",
+      "input_rows": 281820,
+      "output_rows": 32715,
+      "combined_rows": 314535,
+      "unique_games": 16,
+      "unique_plays": 791,
+      "file_size_bytes": 5486242,
+      "sha256": "73dfda704fd3ac9b3703b581d7dc98c5f8f5c8d1249394f46d77881dc4f73385",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 314535,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 314535,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 175337,
+        "rotate_180_left": 139198
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w16",
+      "relative_filename": "normalized_2023_w16.parquet",
+      "input_rows": 316417,
+      "output_rows": 36508,
+      "combined_rows": 352925,
+      "unique_games": 16,
+      "unique_plays": 896,
+      "file_size_bytes": 6054254,
+      "sha256": "d56186ae93076a77782638886a863e340ababbaf15b3bd772c44d20073162608",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 352925,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 352925,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 170525,
+        "rotate_180_left": 182400
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w17",
+      "relative_filename": "normalized_2023_w17.parquet",
+      "input_rows": 277582,
+      "output_rows": 33076,
+      "combined_rows": 310658,
+      "unique_games": 16,
+      "unique_plays": 809,
+      "file_size_bytes": 5430462,
+      "sha256": "91f8a5ec9b21593219f9d28a9b481ff84bc292b2914c219594940847af225302",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 310658,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 310658,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 143371,
+        "rotate_180_left": 167287
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    },
+    {
+      "week": "2023_w18",
+      "relative_filename": "normalized_2023_w18.parquet",
+      "input_rows": 254917,
+      "output_rows": 29682,
+      "combined_rows": 284599,
+      "unique_games": 16,
+      "unique_plays": 750,
+      "file_size_bytes": 5053053,
+      "sha256": "0b692fb90e33acb0515e746673f6ab1ced423d6f7e4b65644cfde4314640c5b9",
+      "reconciliation_status": "PASS",
+      "raw_coordinate_class_counts": {
+        "nominal": 284599,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "normalized_coordinate_class_counts": {
+        "nominal": 284599,
+        "extended_tolerance": 0,
+        "invalid": 0
+      },
+      "transform_applied_counts": {
+        "identity_right": 139432,
+        "rotate_180_left": 145167
+      },
+      "extended_tolerance_count": 0,
+      "invalid_coordinate_count": 0
+    }
+  ],
+  "aggregate": {
+    "input_rows": 4880579,
+    "output_rows": 562936,
+    "combined_rows": 5443515,
+    "unique_games": 272,
+    "unique_plays": 14108,
+    "coordinate_class_counts": {
+      "raw": {
+        "nominal": 5443512,
+        "extended_tolerance": 3,
+        "invalid": 0
+      },
+      "normalized": {
+        "nominal": 5443512,
+        "extended_tolerance": 3,
+        "invalid": 0
+      }
+    },
+    "transform_applied_counts": {
+      "identity_right": 2741683,
+      "rotate_180_left": 2701832
+    },
+    "runtime_seconds_by_week": {
+      "2023_w01": 6.398,
+      "2023_w02": 8.035,
+      "2023_w03": 9.565,
+      "2023_w04": 8.855,
+      "2023_w05": 8.502,
+      "2023_w06": 8.309,
+      "2023_w07": 7.695,
+      "2023_w08": 9.361,
+      "2023_w09": 7.788,
+      "2023_w10": 8.052,
+      "2023_w11": 7.652,
+      "2023_w12": 9.197,
+      "2023_w13": 7.721,
+      "2023_w14": 9.291,
+      "2023_w15": 10.64,
+      "2023_w16": 10.538,
+      "2023_w17": 8.879,
+      "2023_w18": 9.039
+    }
+  },
+  "validation_status": "PASS",
+  "project_claim_boundary": "Target-centric receiver/defender tracking only; these partitions do not represent complete passing windows, quarterback target selection, official coverage assignments, or full-field defensive control."
+}

@@ -1,0 +1,233 @@
+{
+  "cohort_summary": {
+    "processed_weeks": [
+      "2023_w01",
+      "2023_w02",
+      "2023_w03",
+      "2023_w04",
+      "2023_w05",
+      "2023_w06",
+      "2023_w07",
+      "2023_w08",
+      "2023_w09",
+      "2023_w10",
+      "2023_w11",
+      "2023_w12",
+      "2023_w13",
+      "2023_w14",
+      "2023_w15",
+      "2023_w16",
+      "2023_w17",
+      "2023_w18"
+    ],
+    "source_row_totals": {
+      "input": 4880579,
+      "output": 562936
+    },
+    "weekly_runtimes": {
+      "2023_w01": 20.676,
+      "2023_w02": 17.555,
+      "2023_w03": 18.367,
+      "2023_w04": 15.729,
+      "2023_w05": 14.297,
+      "2023_w06": 15.381,
+      "2023_w07": 13.835,
+      "2023_w08": 16.234,
+      "2023_w09": 14.942,
+      "2023_w10": 15.54,
+      "2023_w11": 15.037,
+      "2023_w12": 18.411,
+      "2023_w13": 14.448,
+      "2023_w14": 17.537,
+      "2023_w15": 18.097,
+      "2023_w16": 18.293,
+      "2023_w17": 17.194,
+      "2023_w18": 15.764
+    },
+    "aggregate_table_counts": {
+      "source_plays": {
+        "rows": 14108,
+        "eligible": 14108,
+        "excluded": 0
+      },
+      "descriptive_target_frames": {
+        "rows": 396914,
+        "eligible": 396879,
+        "excluded": 35
+      },
+      "primary_origins": {
+        "rows": 14108,
+        "eligible": 14108,
+        "excluded": 0
+      },
+      "trajectory_eligibility": {
+        "rows": 138135,
+        "eligible": 85542,
+        "excluded": 52593
+      },
+      "future_separation_eligibility": {
+        "rows": 42324,
+        "eligible": 23100,
+        "excluded": 19224
+      },
+      "pair_exclusions": {
+        "rows": 0,
+        "eligible": 0,
+        "excluded": 0
+      }
+    },
+    "aggregate_reconciliation_status": "PASS",
+    "aggregate_split_validation_status": "PASS"
+  },
+  "reporting_summary": {
+    "exclusions_by_primary_reason": {
+      "C01": 0,
+      "C02": 0,
+      "C03": 0,
+      "C04": 0,
+      "C05": 0,
+      "C06": 0,
+      "C07": 38,
+      "C08": 0,
+      "C09": 0,
+      "C10": 0,
+      "C11": 0,
+      "C12": 0,
+      "C13": 71814,
+      "C14": 0
+    },
+    "counts_by_split": {
+      "development_train": {
+        "source_plays": {
+          "rows": 9400,
+          "eligible": 9400,
+          "excluded": 0
+        },
+        "descriptive_target_frames": {
+          "rows": 262822,
+          "eligible": 262787,
+          "excluded": 35
+        },
+        "primary_origins": {
+          "rows": 9400,
+          "eligible": 9400,
+          "excluded": 0
+        },
+        "trajectory_eligibility": {
+          "rows": 91848,
+          "eligible": 56071,
+          "excluded": 35777
+        },
+        "future_separation_eligibility": {
+          "rows": 28200,
+          "eligible": 15207,
+          "excluded": 12993
+        },
+        "pair_exclusions": {
+          "rows": 0,
+          "eligible": 0,
+          "excluded": 0
+        }
+      },
+      "validation": {
+        "source_plays": {
+          "rows": 2253,
+          "eligible": 2253,
+          "excluded": 0
+        },
+        "descriptive_target_frames": {
+          "rows": 64737,
+          "eligible": 64737,
+          "excluded": 0
+        },
+        "primary_origins": {
+          "rows": 2253,
+          "eligible": 2253,
+          "excluded": 0
+        },
+        "trajectory_eligibility": {
+          "rows": 22392,
+          "eligible": 14353,
+          "excluded": 8039
+        },
+        "future_separation_eligibility": {
+          "rows": 6759,
+          "eligible": 3832,
+          "excluded": 2927
+        },
+        "pair_exclusions": {
+          "rows": 0,
+          "eligible": 0,
+          "excluded": 0
+        }
+      },
+      "frozen_test": {
+        "source_plays": {
+          "rows": 2455,
+          "eligible": 2455,
+          "excluded": 0
+        },
+        "descriptive_target_frames": {
+          "rows": 69355,
+          "eligible": 69355,
+          "excluded": 0
+        },
+        "primary_origins": {
+          "rows": 2455,
+          "eligible": 2455,
+          "excluded": 0
+        },
+        "trajectory_eligibility": {
+          "rows": 23895,
+          "eligible": 15118,
+          "excluded": 8777
+        },
+        "future_separation_eligibility": {
+          "rows": 7365,
+          "eligible": 4061,
+          "excluded": 3304
+        },
+        "pair_exclusions": {
+          "rows": 0,
+          "eligible": 0,
+          "excluded": 0
+        }
+      }
+    },
+    "observed_game_count": 272,
+    "evaluable_defender_count_distribution_by_horizon": {
+      "5": {
+        "0": 1142,
+        "1": 2822,
+        "2": 4658,
+        "3": 3118,
+        "4": 1589,
+        "5": 612,
+        "6": 141,
+        "7": 25,
+        "8": 1
+      },
+      "10": {
+        "0": 6704,
+        "1": 1025,
+        "2": 2400,
+        "3": 1984,
+        "4": 1264,
+        "5": 566,
+        "6": 139,
+        "7": 25,
+        "8": 1
+      },
+      "15": {
+        "0": 11378,
+        "1": 127,
+        "2": 723,
+        "3": 977,
+        "4": 581,
+        "5": 239,
+        "6": 65,
+        "7": 18
+      }
+    }
+  }
+}

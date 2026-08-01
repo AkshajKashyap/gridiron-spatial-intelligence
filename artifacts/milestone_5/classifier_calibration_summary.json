@@ -1,0 +1,1069 @@
+{
+  "result_format_version": "milestone_5_classifier_calibration_v1",
+  "generation_timestamp_utc": "2026-08-01T00:58:02.520013Z",
+  "output_artifact": "artifacts/milestone_5/classifier_calibration_summary.json",
+  "processed_weeks": [
+    "2023_w01",
+    "2023_w02",
+    "2023_w03",
+    "2023_w04",
+    "2023_w05",
+    "2023_w06",
+    "2023_w07",
+    "2023_w08",
+    "2023_w09",
+    "2023_w10",
+    "2023_w11",
+    "2023_w12",
+    "2023_w13",
+    "2023_w14",
+    "2023_w15"
+  ],
+  "development_weeks": [
+    "2023_w01",
+    "2023_w02",
+    "2023_w03",
+    "2023_w04",
+    "2023_w05",
+    "2023_w06",
+    "2023_w07",
+    "2023_w08",
+    "2023_w09",
+    "2023_w10",
+    "2023_w11",
+    "2023_w12"
+  ],
+  "validation_weeks": [
+    "2023_w13",
+    "2023_w14",
+    "2023_w15"
+  ],
+  "frozen_test_weeks_accessed": 0,
+  "binding_milestone_4_selection_checksum": {
+    "algorithm": "sha256",
+    "value": "5cea3a52a368a3517274e16229e285f359c0fb56c78e8c05bd641b269e6efa17"
+  },
+  "frozen_classifier_specifications": [
+    {
+      "population": "all_pairs",
+      "task": "classification",
+      "horizon": 5,
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "target": "closing",
+      "target_definition": "1 when separation_change < 0; 0 otherwise"
+    },
+    {
+      "population": "all_pairs",
+      "task": "classification",
+      "horizon": 10,
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "target": "closing",
+      "target_definition": "1 when separation_change < 0; 0 otherwise"
+    },
+    {
+      "population": "all_pairs",
+      "task": "classification",
+      "horizon": 15,
+      "selected_candidate": "multivariable_logistic_c_0.1",
+      "selected_hyperparameter": {
+        "C": 0.1
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "target": "closing",
+      "target_definition": "1 when separation_change < 0; 0 otherwise"
+    }
+  ],
+  "fixed_probability_bin_edges": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "sample_counts": [
+    {
+      "population": "all_pairs",
+      "horizon": 5,
+      "split": "development_train",
+      "sample_count": 21216,
+      "play_count": 8648,
+      "closing_rate": 0.5756975867269984
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 5,
+      "split": "validation",
+      "sample_count": 5211,
+      "play_count": 2085,
+      "closing_rate": 0.5515256188831318
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 10,
+      "split": "development_train",
+      "sample_count": 13488,
+      "play_count": 4837,
+      "closing_rate": 0.5399614472123369
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 10,
+      "split": "validation",
+      "sample_count": 3499,
+      "play_count": 1245,
+      "closing_rate": 0.5181480422977993
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 15,
+      "split": "development_train",
+      "sample_count": 5320,
+      "play_count": 1722,
+      "closing_rate": 0.49680451127819547
+    },
+    {
+      "population": "all_pairs",
+      "horizon": 15,
+      "split": "validation",
+      "sample_count": 1620,
+      "play_count": 502,
+      "closing_rate": 0.4759259259259259
+    }
+  ],
+  "horizon_diagnostics": [
+    {
+      "population": "all_pairs",
+      "task": "classification",
+      "horizon": 5,
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "target": "closing",
+      "target_definition": "1 when separation_change < 0; 0 otherwise",
+      "predictive_metrics": {
+        "sample_count": 5211,
+        "play_count": 2085,
+        "observed_closing_rate": 0.5515256188831318,
+        "mean_predicted_closing_probability": 0.5761532885077332,
+        "log_loss": 0.6324333825295708,
+        "brier_score": 0.21777458066822736,
+        "roc_auc": 0.705958486351153,
+        "accuracy_at_0_5": 0.6670504701592784
+      },
+      "reliability_bins": [
+        {
+          "bin_index": 0,
+          "lower_bound": 0.0,
+          "upper_bound": 0.1,
+          "upper_bound_inclusive": false,
+          "sample_count": 0,
+          "play_count": 0,
+          "mean_predicted_probability": null,
+          "observed_closing_fraction": null,
+          "calibration_gap": null
+        },
+        {
+          "bin_index": 1,
+          "lower_bound": 0.1,
+          "upper_bound": 0.2,
+          "upper_bound_inclusive": false,
+          "sample_count": 54,
+          "play_count": 54,
+          "mean_predicted_probability": 0.17547737342465858,
+          "observed_closing_fraction": 0.2037037037037037,
+          "calibration_gap": 0.028226330279045114
+        },
+        {
+          "bin_index": 2,
+          "lower_bound": 0.2,
+          "upper_bound": 0.3,
+          "upper_bound_inclusive": false,
+          "sample_count": 337,
+          "play_count": 311,
+          "mean_predicted_probability": 0.2549341850509936,
+          "observed_closing_fraction": 0.17210682492581603,
+          "calibration_gap": -0.08282736012517755
+        },
+        {
+          "bin_index": 3,
+          "lower_bound": 0.3,
+          "upper_bound": 0.4,
+          "upper_bound_inclusive": false,
+          "sample_count": 397,
+          "play_count": 347,
+          "mean_predicted_probability": 0.35618382967153644,
+          "observed_closing_fraction": 0.22418136020151133,
+          "calibration_gap": -0.1320024694700251
+        },
+        {
+          "bin_index": 4,
+          "lower_bound": 0.4,
+          "upper_bound": 0.5,
+          "upper_bound_inclusive": false,
+          "sample_count": 1034,
+          "play_count": 881,
+          "mean_predicted_probability": 0.4566465130418009,
+          "observed_closing_fraction": 0.437137330754352,
+          "calibration_gap": -0.019509182287448912
+        },
+        {
+          "bin_index": 5,
+          "lower_bound": 0.5,
+          "upper_bound": 0.6,
+          "upper_bound_inclusive": false,
+          "sample_count": 1159,
+          "play_count": 964,
+          "mean_predicted_probability": 0.5492410376793293,
+          "observed_closing_fraction": 0.5910267471958585,
+          "calibration_gap": 0.04178570951652916
+        },
+        {
+          "bin_index": 6,
+          "lower_bound": 0.6,
+          "upper_bound": 0.7,
+          "upper_bound_inclusive": false,
+          "sample_count": 967,
+          "play_count": 843,
+          "mean_predicted_probability": 0.6464711856153208,
+          "observed_closing_fraction": 0.656670113753878,
+          "calibration_gap": 0.010198928138557162
+        },
+        {
+          "bin_index": 7,
+          "lower_bound": 0.7,
+          "upper_bound": 0.8,
+          "upper_bound_inclusive": false,
+          "sample_count": 607,
+          "play_count": 540,
+          "mean_predicted_probability": 0.7465990423737746,
+          "observed_closing_fraction": 0.7314662273476112,
+          "calibration_gap": -0.015132815026163371
+        },
+        {
+          "bin_index": 8,
+          "lower_bound": 0.8,
+          "upper_bound": 0.9,
+          "upper_bound_inclusive": false,
+          "sample_count": 413,
+          "play_count": 377,
+          "mean_predicted_probability": 0.8466886592009417,
+          "observed_closing_fraction": 0.7457627118644068,
+          "calibration_gap": -0.10092594733653493
+        },
+        {
+          "bin_index": 9,
+          "lower_bound": 0.9,
+          "upper_bound": 1.0,
+          "upper_bound_inclusive": true,
+          "sample_count": 243,
+          "play_count": 217,
+          "mean_predicted_probability": 0.9415336579861359,
+          "observed_closing_fraction": 0.7901234567901234,
+          "calibration_gap": -0.15141020119601245
+        }
+      ],
+      "ece": 0.047585344801999344,
+      "mce": 0.15141020119601245,
+      "calibration_equation": {
+        "intercept": -0.07732974435638477,
+        "slope": 0.8572417927298907,
+        "convergence_status": "CONVERGED",
+        "logit_clip_epsilon": 1e-06
+      },
+      "brier_decomposition": {
+        "reliability": 0.0041656083154416775,
+        "resolution": 0.03313855122594027,
+        "uncertainty": 0.24734511059871025,
+        "reconstructed_brier_score": 0.21837216768821166,
+        "decomposition_reference_brier_score": 0.21837216768821166,
+        "absolute_reconstruction_error": 0.0,
+        "reconstruction_tolerance": 1e-10,
+        "decomposition_reference": "fixed_bin_mean_probabilities",
+        "original_probability_brier_score": 0.21777458066822736,
+        "absolute_binning_approximation": 0.0005975870199843025
+      },
+      "confidence_regions": [
+        {
+          "region": "low",
+          "definition": "p < 0.40",
+          "sample_count": 788,
+          "play_count": 622,
+          "mean_predicted_probability": 0.30049946561766033,
+          "observed_closing_fraction": 0.20050761421319796,
+          "brier_score": 0.17196973086054645,
+          "log_loss": 0.5293605828293084
+        },
+        {
+          "region": "middle",
+          "definition": "0.40 <= p <= 0.60",
+          "sample_count": 2193,
+          "play_count": 1543,
+          "mean_predicted_probability": 0.505582698201352,
+          "observed_closing_fraction": 0.518467852257182,
+          "brier_score": 0.24263917042559577,
+          "log_loss": 0.6783287789378415
+        },
+        {
+          "region": "high",
+          "definition": "p > 0.60",
+          "sample_count": 2230,
+          "play_count": 1496,
+          "mean_predicted_probability": 0.7429589015029221,
+          "observed_closing_fraction": 0.7080717488789238,
+          "brier_score": 0.2095082920182469,
+          "log_loss": 0.6237216165387498
+        }
+      ],
+      "play_cluster_bootstrap": {
+        "seed": 2026,
+        "completed_resamples": 500,
+        "sampling_unit": "game_id/play_id",
+        "confidence_level": 0.95,
+        "intervals": {
+          "ece": {
+            "lower": 0.03948309612332925,
+            "upper": 0.061186309104376856
+          },
+          "brier_score": {
+            "lower": 0.21263170162914868,
+            "upper": 0.22272812412128157
+          },
+          "mean_probability_minus_observed_rate": {
+            "lower": 0.011289627286681576,
+            "upper": 0.03785424064175481
+          },
+          "calibration_slope": {
+            "lower": 0.7688231088465752,
+            "upper": 0.9540575700826611
+          }
+        }
+      }
+    },
+    {
+      "population": "all_pairs",
+      "task": "classification",
+      "horizon": 10,
+      "selected_candidate": "multivariable_logistic_c_10",
+      "selected_hyperparameter": {
+        "C": 10.0
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "target": "closing",
+      "target_definition": "1 when separation_change < 0; 0 otherwise",
+      "predictive_metrics": {
+        "sample_count": 3499,
+        "play_count": 1245,
+        "observed_closing_rate": 0.5181480422977993,
+        "mean_predicted_closing_probability": 0.5416331601601587,
+        "log_loss": 0.6287226318324819,
+        "brier_score": 0.21779340941120656,
+        "roc_auc": 0.7107103108628273,
+        "accuracy_at_0_5": 0.6596170334381252
+      },
+      "reliability_bins": [
+        {
+          "bin_index": 0,
+          "lower_bound": 0.0,
+          "upper_bound": 0.1,
+          "upper_bound_inclusive": false,
+          "sample_count": 0,
+          "play_count": 0,
+          "mean_predicted_probability": null,
+          "observed_closing_fraction": null,
+          "calibration_gap": null
+        },
+        {
+          "bin_index": 1,
+          "lower_bound": 0.1,
+          "upper_bound": 0.2,
+          "upper_bound_inclusive": false,
+          "sample_count": 50,
+          "play_count": 50,
+          "mean_predicted_probability": 0.18847329195047777,
+          "observed_closing_fraction": 0.1,
+          "calibration_gap": -0.08847329195047776
+        },
+        {
+          "bin_index": 2,
+          "lower_bound": 0.2,
+          "upper_bound": 0.3,
+          "upper_bound_inclusive": false,
+          "sample_count": 349,
+          "play_count": 321,
+          "mean_predicted_probability": 0.24936869847603096,
+          "observed_closing_fraction": 0.2349570200573066,
+          "calibration_gap": -0.014411678418724372
+        },
+        {
+          "bin_index": 3,
+          "lower_bound": 0.3,
+          "upper_bound": 0.4,
+          "upper_bound_inclusive": false,
+          "sample_count": 346,
+          "play_count": 303,
+          "mean_predicted_probability": 0.35278916570836755,
+          "observed_closing_fraction": 0.33236994219653176,
+          "calibration_gap": -0.020419223511835782
+        },
+        {
+          "bin_index": 4,
+          "lower_bound": 0.4,
+          "upper_bound": 0.5,
+          "upper_bound_inclusive": false,
+          "sample_count": 968,
+          "play_count": 792,
+          "mean_predicted_probability": 0.4485588677728844,
+          "observed_closing_fraction": 0.42045454545454547,
+          "calibration_gap": -0.028104322318338926
+        },
+        {
+          "bin_index": 5,
+          "lower_bound": 0.5,
+          "upper_bound": 0.6,
+          "upper_bound_inclusive": false,
+          "sample_count": 580,
+          "play_count": 504,
+          "mean_predicted_probability": 0.5466446954082359,
+          "observed_closing_fraction": 0.5793103448275863,
+          "calibration_gap": 0.03266564941935035
+        },
+        {
+          "bin_index": 6,
+          "lower_bound": 0.6,
+          "upper_bound": 0.7,
+          "upper_bound_inclusive": false,
+          "sample_count": 413,
+          "play_count": 374,
+          "mean_predicted_probability": 0.6476940310746224,
+          "observed_closing_fraction": 0.6343825665859564,
+          "calibration_gap": -0.013311464488666047
+        },
+        {
+          "bin_index": 7,
+          "lower_bound": 0.7,
+          "upper_bound": 0.8,
+          "upper_bound_inclusive": false,
+          "sample_count": 326,
+          "play_count": 299,
+          "mean_predicted_probability": 0.746480393843342,
+          "observed_closing_fraction": 0.7116564417177914,
+          "calibration_gap": -0.03482395212555056
+        },
+        {
+          "bin_index": 8,
+          "lower_bound": 0.8,
+          "upper_bound": 0.9,
+          "upper_bound_inclusive": false,
+          "sample_count": 283,
+          "play_count": 254,
+          "mean_predicted_probability": 0.8503143810669874,
+          "observed_closing_fraction": 0.7420494699646644,
+          "calibration_gap": -0.10826491110232306
+        },
+        {
+          "bin_index": 9,
+          "lower_bound": 0.9,
+          "upper_bound": 1.0,
+          "upper_bound_inclusive": true,
+          "sample_count": 184,
+          "play_count": 166,
+          "mean_predicted_probability": 0.9451517135326448,
+          "observed_closing_fraction": 0.8913043478260869,
+          "calibration_gap": -0.053847365706557904
+        }
+      ],
+      "ece": 0.03431454150524201,
+      "mce": 0.10826491110232306,
+      "calibration_equation": {
+        "intercept": -0.09256320301789805,
+        "slope": 0.8352135738254889,
+        "convergence_status": "CONVERGED",
+        "logit_clip_epsilon": 1e-06
+      },
+      "brier_decomposition": {
+        "reliability": 0.0018035877064897863,
+        "resolution": 0.03363152981810945,
+        "uncertainty": 0.2496706485607573,
+        "reconstructed_brier_score": 0.21784270644913764,
+        "decomposition_reference_brier_score": 0.21784270644913759,
+        "absolute_reconstruction_error": 5.551115123125783e-17,
+        "reconstruction_tolerance": 1e-10,
+        "decomposition_reference": "fixed_bin_mean_probabilities",
+        "original_probability_brier_score": 0.21779340941120656,
+        "absolute_binning_approximation": 4.9297037931023135e-05
+      },
+      "confidence_regions": [
+        {
+          "region": "low",
+          "definition": "p < 0.40",
+          "sample_count": 745,
+          "play_count": 586,
+          "mean_predicted_probability": 0.2933132774506763,
+          "observed_closing_fraction": 0.27114093959731544,
+          "brier_score": 0.19322175110017806,
+          "log_loss": 0.5727344937921779
+        },
+        {
+          "region": "middle",
+          "definition": "0.40 <= p <= 0.60",
+          "sample_count": 1548,
+          "play_count": 1047,
+          "mean_predicted_probability": 0.48530937166726673,
+          "observed_closing_fraction": 0.47997416020671835,
+          "brier_score": 0.24376268158921163,
+          "log_loss": 0.6806162599056921
+        },
+        {
+          "region": "high",
+          "definition": "p > 0.60",
+          "sample_count": 1206,
+          "play_count": 811,
+          "mean_predicted_probability": 0.7673276354549856,
+          "observed_closing_fraction": 0.7197346600331676,
+          "brier_score": 0.19963872625213877,
+          "log_loss": 0.596699270789942
+        }
+      ],
+      "play_cluster_bootstrap": {
+        "seed": 2026,
+        "completed_resamples": 500,
+        "sampling_unit": "game_id/play_id",
+        "confidence_level": 0.95,
+        "intervals": {
+          "ece": {
+            "lower": 0.024502894034699556,
+            "upper": 0.05295586662739019
+          },
+          "brier_score": {
+            "lower": 0.21179954823598454,
+            "upper": 0.22377604437618395
+          },
+          "mean_probability_minus_observed_rate": {
+            "lower": 0.007467937271012792,
+            "upper": 0.04089372861831195
+          },
+          "calibration_slope": {
+            "lower": 0.7443156248334373,
+            "upper": 0.9424761441229375
+          }
+        }
+      }
+    },
+    {
+      "population": "all_pairs",
+      "task": "classification",
+      "horizon": 15,
+      "selected_candidate": "multivariable_logistic_c_0.1",
+      "selected_hyperparameter": {
+        "C": 0.1
+      },
+      "feature_subset": [
+        "separation_origin",
+        "dx",
+        "dy",
+        "abs_dx",
+        "abs_dy",
+        "target_x_origin",
+        "target_y_origin",
+        "defender_x_origin",
+        "defender_y_origin",
+        "valid_observed_defender_count_origin",
+        "defender_rank_origin",
+        "nearest_observed_defender_indicator"
+      ],
+      "preprocessing": {
+        "numeric_imputation": "median fit on development_train only",
+        "numeric_scaling": "standardization fit on development_train only",
+        "categorical_preprocessing": "none; optional categoricals omitted",
+        "pipeline_fit_population": "development_train"
+      },
+      "target": "closing",
+      "target_definition": "1 when separation_change < 0; 0 otherwise",
+      "predictive_metrics": {
+        "sample_count": 1620,
+        "play_count": 502,
+        "observed_closing_rate": 0.4759259259259259,
+        "mean_predicted_closing_probability": 0.5052237723232395,
+        "log_loss": 0.6168612455297858,
+        "brier_score": 0.21153092990955658,
+        "roc_auc": 0.7325319021844576,
+        "accuracy_at_0_5": 0.6777777777777778
+      },
+      "reliability_bins": [
+        {
+          "bin_index": 0,
+          "lower_bound": 0.0,
+          "upper_bound": 0.1,
+          "upper_bound_inclusive": false,
+          "sample_count": 0,
+          "play_count": 0,
+          "mean_predicted_probability": null,
+          "observed_closing_fraction": null,
+          "calibration_gap": null
+        },
+        {
+          "bin_index": 1,
+          "lower_bound": 0.1,
+          "upper_bound": 0.2,
+          "upper_bound_inclusive": false,
+          "sample_count": 116,
+          "play_count": 110,
+          "mean_predicted_probability": 0.17147701453008138,
+          "observed_closing_fraction": 0.16379310344827586,
+          "calibration_gap": -0.007683911081805522
+        },
+        {
+          "bin_index": 2,
+          "lower_bound": 0.2,
+          "upper_bound": 0.3,
+          "upper_bound_inclusive": false,
+          "sample_count": 200,
+          "play_count": 174,
+          "mean_predicted_probability": 0.24876122037247558,
+          "observed_closing_fraction": 0.235,
+          "calibration_gap": -0.013761220372475597
+        },
+        {
+          "bin_index": 3,
+          "lower_bound": 0.3,
+          "upper_bound": 0.4,
+          "upper_bound_inclusive": false,
+          "sample_count": 171,
+          "play_count": 152,
+          "mean_predicted_probability": 0.35308274310927507,
+          "observed_closing_fraction": 0.29239766081871343,
+          "calibration_gap": -0.06068508229056163
+        },
+        {
+          "bin_index": 4,
+          "lower_bound": 0.4,
+          "upper_bound": 0.5,
+          "upper_bound_inclusive": false,
+          "sample_count": 458,
+          "play_count": 370,
+          "mean_predicted_probability": 0.44758957588466625,
+          "observed_closing_fraction": 0.42139737991266374,
+          "calibration_gap": -0.026192195972002508
+        },
+        {
+          "bin_index": 5,
+          "lower_bound": 0.5,
+          "upper_bound": 0.6,
+          "upper_bound_inclusive": false,
+          "sample_count": 203,
+          "play_count": 179,
+          "mean_predicted_probability": 0.5428131911495204,
+          "observed_closing_fraction": 0.5862068965517241,
+          "calibration_gap": 0.043393705402203664
+        },
+        {
+          "bin_index": 6,
+          "lower_bound": 0.6,
+          "upper_bound": 0.7,
+          "upper_bound_inclusive": false,
+          "sample_count": 131,
+          "play_count": 117,
+          "mean_predicted_probability": 0.6470461952115371,
+          "observed_closing_fraction": 0.6564885496183206,
+          "calibration_gap": 0.009442354406783537
+        },
+        {
+          "bin_index": 7,
+          "lower_bound": 0.7,
+          "upper_bound": 0.8,
+          "upper_bound_inclusive": false,
+          "sample_count": 118,
+          "play_count": 109,
+          "mean_predicted_probability": 0.7459792125355571,
+          "observed_closing_fraction": 0.6610169491525424,
+          "calibration_gap": -0.08496226338301471
+        },
+        {
+          "bin_index": 8,
+          "lower_bound": 0.8,
+          "upper_bound": 0.9,
+          "upper_bound_inclusive": false,
+          "sample_count": 108,
+          "play_count": 99,
+          "mean_predicted_probability": 0.8513515834078951,
+          "observed_closing_fraction": 0.7314814814814815,
+          "calibration_gap": -0.11987010192641356
+        },
+        {
+          "bin_index": 9,
+          "lower_bound": 0.9,
+          "upper_bound": 1.0,
+          "upper_bound_inclusive": true,
+          "sample_count": 115,
+          "play_count": 108,
+          "mean_predicted_probability": 0.943653140117285,
+          "observed_closing_fraction": 0.8695652173913043,
+          "calibration_gap": -0.07408792272598064
+        }
+      ],
+      "ece": 0.04170015580958019,
+      "mce": 0.11987010192641356,
+      "calibration_equation": {
+        "intercept": -0.14875711109596865,
+        "slope": 0.8047891356413966,
+        "convergence_status": "CONVERGED",
+        "logit_clip_epsilon": 1e-06
+      },
+      "brier_decomposition": {
+        "reliability": 0.00272682741885466,
+        "resolution": 0.040547700128151024,
+        "uncertainty": 0.249420438957476,
+        "reconstructed_brier_score": 0.21159956624817966,
+        "decomposition_reference_brier_score": 0.21159956624817966,
+        "absolute_reconstruction_error": 0.0,
+        "reconstruction_tolerance": 1e-10,
+        "decomposition_reference": "fixed_bin_mean_probabilities",
+        "original_probability_brier_score": 0.21153092990955658,
+        "absolute_binning_approximation": 6.863633862308482e-05
+      },
+      "confidence_regions": [
+        {
+          "region": "low",
+          "definition": "p < 0.40",
+          "sample_count": 487,
+          "play_count": 339,
+          "mean_predicted_probability": 0.26698301197468294,
+          "observed_closing_fraction": 0.23819301848049282,
+          "brier_score": 0.17948927853427216,
+          "log_loss": 0.5427671657905538
+        },
+        {
+          "region": "middle",
+          "definition": "0.40 <= p <= 0.60",
+          "sample_count": 661,
+          "play_count": 459,
+          "mean_predicted_probability": 0.47683374214603597,
+          "observed_closing_fraction": 0.4720121028744327,
+          "brier_score": 0.24346930787676602,
+          "log_loss": 0.6800173655666452
+        },
+        {
+          "region": "high",
+          "definition": "p > 0.60",
+          "sample_count": 472,
+          "play_count": 327,
+          "mean_predicted_probability": 0.790793815197982,
+          "observed_closing_fraction": 0.7266949152542372,
+          "brier_score": 0.19986359173887452,
+          "log_loss": 0.6048646808870779
+        }
+      ],
+      "play_cluster_bootstrap": {
+        "seed": 2026,
+        "completed_resamples": 500,
+        "sampling_unit": "game_id/play_id",
+        "confidence_level": 0.95,
+        "intervals": {
+          "ece": {
+            "lower": 0.031409932259354,
+            "upper": 0.06843011956950411
+          },
+          "brier_score": {
+            "lower": 0.2024662874073709,
+            "upper": 0.22114301588171073
+          },
+          "mean_probability_minus_observed_rate": {
+            "lower": 0.0074876840756535005,
+            "upper": 0.051691815340219466
+          },
+          "calibration_slope": {
+            "lower": 0.6805527573874576,
+            "upper": 0.9493484108101985
+          }
+        }
+      }
+    }
+  ],
+  "bootstrap_seed": 2026,
+  "bootstrap_resamples_per_horizon": 500,
+  "leakage_diagnostics": {
+    "status": "PASS",
+    "processed_weeks_exact": true,
+    "frozen_test_weeks_accessed": 0,
+    "evaluated_classifier_count": 3,
+    "all_pair_population_only": true,
+    "exact_registered_feature_lists": true,
+    "prohibited_feature_count": 0,
+    "development_only_preprocessing_fit": true,
+    "validation_rows_used_for_fit": 0,
+    "bootstrap_sampling_unit": "game_id/play_id",
+    "input_mutation_detected": false,
+    "development_weeks": [
+      "2023_w01",
+      "2023_w02",
+      "2023_w03",
+      "2023_w04",
+      "2023_w05",
+      "2023_w06",
+      "2023_w07",
+      "2023_w08",
+      "2023_w09",
+      "2023_w10",
+      "2023_w11",
+      "2023_w12"
+    ],
+    "validation_weeks": [
+      "2023_w13",
+      "2023_w14",
+      "2023_w15"
+    ],
+    "cross_split_game_play_count": 0
+  },
+  "reconciliation_diagnostics": {
+    "status": "PASS",
+    "mismatch_count": 0,
+    "duplicate_pair_horizon_key_count": 0,
+    "weekly": [
+      {
+        "week": "2023_w01",
+        "expected_horizon_pairs": 3420,
+        "constructed_horizon_pairs": 3420,
+        "baseline_samples": 3420,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w02",
+        "expected_horizon_pairs": 3443,
+        "constructed_horizon_pairs": 3443,
+        "baseline_samples": 3443,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w03",
+        "expected_horizon_pairs": 3909,
+        "constructed_horizon_pairs": 3909,
+        "baseline_samples": 3909,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w04",
+        "expected_horizon_pairs": 3310,
+        "constructed_horizon_pairs": 3310,
+        "baseline_samples": 3310,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w05",
+        "expected_horizon_pairs": 3243,
+        "constructed_horizon_pairs": 3243,
+        "baseline_samples": 3243,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w06",
+        "expected_horizon_pairs": 3398,
+        "constructed_horizon_pairs": 3398,
+        "baseline_samples": 3398,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w07",
+        "expected_horizon_pairs": 3063,
+        "constructed_horizon_pairs": 3063,
+        "baseline_samples": 3063,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w08",
+        "expected_horizon_pairs": 3626,
+        "constructed_horizon_pairs": 3626,
+        "baseline_samples": 3626,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w09",
+        "expected_horizon_pairs": 3060,
+        "constructed_horizon_pairs": 3060,
+        "baseline_samples": 3060,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w10",
+        "expected_horizon_pairs": 3177,
+        "constructed_horizon_pairs": 3177,
+        "baseline_samples": 3177,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w11",
+        "expected_horizon_pairs": 2919,
+        "constructed_horizon_pairs": 2919,
+        "baseline_samples": 2919,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w12",
+        "expected_horizon_pairs": 3456,
+        "constructed_horizon_pairs": 3456,
+        "baseline_samples": 3456,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w13",
+        "expected_horizon_pairs": 3184,
+        "constructed_horizon_pairs": 3184,
+        "baseline_samples": 3184,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w14",
+        "expected_horizon_pairs": 3585,
+        "constructed_horizon_pairs": 3585,
+        "baseline_samples": 3585,
+        "mismatch_count": 0
+      },
+      {
+        "week": "2023_w15",
+        "expected_horizon_pairs": 3561,
+        "constructed_horizon_pairs": 3561,
+        "baseline_samples": 3561,
+        "mismatch_count": 0
+      }
+    ]
+  },
+  "runtime_by_week_seconds": {
+    "2023_w01": 1.208,
+    "2023_w02": 1.323,
+    "2023_w03": 1.024,
+    "2023_w04": 0.858,
+    "2023_w05": 0.794,
+    "2023_w06": 0.847,
+    "2023_w07": 0.743,
+    "2023_w08": 0.851,
+    "2023_w09": 0.816,
+    "2023_w10": 0.813,
+    "2023_w11": 0.826,
+    "2023_w12": 0.915,
+    "2023_w13": 0.811,
+    "2023_w14": 1.063,
+    "2023_w15": 1.071
+  },
+  "total_runtime_seconds": 46.163,
+  "claim_boundary": [
+    "This analysis evaluates validation calibration for models predicting closing among competition-designated target-defender pairs.",
+    "It does not establish calibration in future seasons.",
+    "It does not establish official coverage responsibility.",
+    "It does not establish quarterback decision quality.",
+    "It does not estimate pass completion probability.",
+    "It does not establish causal defensive effects.",
+    "It does not establish complete passing-window openness.",
+    "It does not establish betting or deployment value.",
+    "It provides no new frozen-test evidence."
+  ]
+}
