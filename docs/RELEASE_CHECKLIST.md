@@ -52,19 +52,30 @@ until their release task is completed and verified.
 - [x] No document claims official coverage, completion probability, causality,
   betting value, or production readiness.
 - [x] Aggregate-only data-free demo smoke passes deterministically.
-- [ ] Remote GitHub Actions green status — **pending first remote CI run**.
+- [x] Remote GitHub Actions passed on Python 3.11 and 3.13
+  (run `30733134092`).
 
 ## Repository and release
 
 - [x] `git diff --check` passes for completed release-hardening tasks.
-- [ ] Confirm clean `git status` after intentional files are committed.
+- [x] MIT license added.
+- [x] Changelog added.
+- [x] Citation metadata added.
+- [x] Contribution guide added.
+- [x] `v0.1.0` release notes prepared.
+- [x] Package governance metadata validated.
+- [ ] Run final post-governance CI.
+- [ ] Complete final clean working-tree verification after intentional files
+  are committed.
 - [ ] Confirm no unrelated generated package metadata remains modified.
-- [ ] Finalize release governance files required by the release decision.
-- [ ] Create release notes/changelog entry.
-- [ ] Create and verify the `v0.1.0` tag — **not yet executed**.
+- [ ] Complete final tag verification.
+- [ ] Create the `v0.1.0` tag.
+- [ ] Create the GitHub release.
+- [ ] Verify post-release URLs.
 
 ## Release decision
 
-Do not tag while any release-blocking item above is open. Task 4 and Task 5
-are explicitly pending; this checklist does not mark them complete by
-anticipation.
+Do not tag while any release-blocking item above is open. Governance metadata
+and release notes are prepared, but post-governance CI, clean-tree checks, tag
+verification, tag creation, GitHub release creation, and post-release URL
+checks remain pending.

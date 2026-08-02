@@ -172,3 +172,11 @@ is unknown.
 - [Milestone 4 baseline result](docs/MILESTONE_4_BASELINE_RESULT.md)
 - [Milestone 5 interpretation result](docs/MILESTONE_5_INTERPRETATION_RESULT.md)
 - [Release evidence manifest](artifacts/release/v0.1.0/evidence_manifest.json)
+
+## Governance and release
+
+- [MIT License](LICENSE)
+- [Changelog](CHANGELOG.md)
+- [Citation metadata](CITATION.cff)
+- [Contributing guide](CONTRIBUTING.md)
+- [v0.1.0 release notes](docs/RELEASE_NOTES_0.1.0.md)

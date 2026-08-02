@@ -5,7 +5,26 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gridiron-spatial-intelligence"
 version = "0.1.0"
-description = "Spatiotemporal NFL player-tracking analytics and passing-window modeling"
+description = "Reproducible target–defender separation analysis using NFL player-tracking data"
+readme = "README.md"
+authors = [
+    { name = "Akshaj Kashyap" },
+]
+license = { file = "LICENSE" }
+keywords = [
+    "NFL tracking",
+    "spatiotemporal analysis",
+    "sports analytics",
+    "separation dynamics",
+    "reproducible research",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+]
 requires-python = ">=3.11"
 dependencies = [
     "numpy",
@@ -16,6 +35,11 @@ dependencies = [
 
 [project.optional-dependencies]
 test = ["pytest"]
+
+[project.urls]
+Repository = "https://github.com/AkshajKashyap/gridiron-spatial-intelligence"
+Documentation = "https://github.com/AkshajKashyap/gridiron-spatial-intelligence#readme"
+Changelog = "https://github.com/AkshajKashyap/gridiron-spatial-intelligence/blob/main/CHANGELOG.md"
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
