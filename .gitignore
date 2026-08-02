@@ -52,3 +52,4 @@ artifacts/release/v0.1.0/*
 # OS / editor
 .DS_Store
 .vscode/
+*.egg-info/
