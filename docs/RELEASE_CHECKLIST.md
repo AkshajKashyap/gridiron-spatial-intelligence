@@ -9,17 +9,18 @@ until their release task is completed and verified.
 
 - [x] Fresh temporary environment installs with `python -m pip install -e ".[test]"`.
 - [x] `gridiron_spatial` imports from the temporary environment.
-- [ ] Run the complete pytest suite in the final release environment.
-- [ ] Compile all tracked Python under `src/`, `scripts/`, and `tests/`.
+- [x] Run the complete pytest suite in the final release environment.
+- [x] Compile all tracked Python under `src/`, `scripts/`, and `tests/`.
 - [x] `pip check` reports no broken requirements in the clean environment.
 - [x] Distribution name, version `0.1.0`, Python requirement, and runtime
   dependencies agree with `pyproject.toml`.
 - [x] Build and inspect the final wheel/sdist and import from the built package.
-- [ ] Run any adopted lint/type checks; none are configured yet.
+- [x] No lint/type checks are configured for `v0.1.0`.
 
 ## Data-free release surface
 
-- [ ] Verify the README quickstart from a fresh clone.
+- [x] Verify the README quickstart through the clean GitHub Actions checkout
+  and equivalent local data-free commands.
 - [x] Packaging and release-evidence focused tests pass.
 - [x] Full data-free release-verification command passes locally.
 - [x] Data-free CI/release command sequence validates locally.
@@ -52,8 +53,8 @@ until their release task is completed and verified.
 - [x] No document claims official coverage, completion probability, causality,
   betting value, or production readiness.
 - [x] Aggregate-only data-free demo smoke passes deterministically.
-- [x] Remote GitHub Actions passed on Python 3.11 and 3.13
-  (run `30733134092`).
+- [x] Post-governance GitHub Actions run `30733959567` passed for commit
+  `3c221c9c77f2e27f8704960ffb3222c606573215` on Python 3.11 and Python 3.13.
 
 ## Repository and release
 
@@ -64,18 +65,24 @@ until their release task is completed and verified.
 - [x] Contribution guide added.
 - [x] `v0.1.0` release notes prepared.
 - [x] Package governance metadata validated.
-- [ ] Run final post-governance CI.
-- [ ] Complete final clean working-tree verification after intentional files
-  are committed.
-- [ ] Confirm no unrelated generated package metadata remains modified.
-- [ ] Complete final tag verification.
+- [x] Final post-governance CI passed.
+- [x] The working tree was clean before verification and remained clean after
+  deterministic verification and generated-output cleanup.
+- [x] Version, release date, author, license, release notes, citation metadata,
+  and changelog are mutually consistent.
+- [x] Final tracked-artifact policy verification passed.
+- [x] Final evidence and checksum verification passed without drift.
+- [x] Final source and wheel distribution build passed.
+- [x] No unrelated generated package metadata remains modified.
+- [x] The `v0.1.0` and `0.1.0` tag names are available locally and remotely.
 - [ ] Create the `v0.1.0` tag.
+- [ ] Push the `v0.1.0` tag.
 - [ ] Create the GitHub release.
+- [ ] Verify the release page.
 - [ ] Verify post-release URLs.
 
 ## Release decision
 
-Do not tag while any release-blocking item above is open. Governance metadata
-and release notes are prepared, but post-governance CI, clean-tree checks, tag
-verification, tag creation, GitHub release creation, and post-release URL
-checks remain pending.
+The final pre-tag gate is complete. Tag creation, pushing the tag, GitHub
+release creation, release-page verification, and post-release URL checks
+remain pending and must be performed explicitly.
