@@ -14,13 +14,15 @@ until their release task is completed and verified.
 - [x] `pip check` reports no broken requirements in the clean environment.
 - [x] Distribution name, version `0.1.0`, Python requirement, and runtime
   dependencies agree with `pyproject.toml`.
-- [ ] Build and inspect the final wheel/sdist and import from the built package.
+- [x] Build and inspect the final wheel/sdist and import from the built package.
 - [ ] Run any adopted lint/type checks; none are configured yet.
 
 ## Data-free release surface
 
 - [ ] Verify the README quickstart from a fresh clone.
 - [x] Packaging and release-evidence focused tests pass.
+- [x] Full data-free release-verification command passes locally.
+- [x] Data-free CI/release command sequence validates locally.
 - [x] Evidence-manifest tests prove deterministic byte-identical output.
 - [x] Rebuild the production manifest and preserve all nine source checksums.
 - [x] Confirm raw NFL data, Parquet, pair-level rows, predictions, and fitted
@@ -50,7 +52,7 @@ until their release task is completed and verified.
 - [x] No document claims official coverage, completion probability, causality,
   betting value, or production readiness.
 - [x] Aggregate-only data-free demo smoke passes deterministically.
-- [ ] CI status — **pending Milestone 6 Task 5**.
+- [ ] Remote GitHub Actions green status — **pending first remote CI run**.
 
 ## Repository and release
 
